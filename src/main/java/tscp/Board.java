@@ -249,14 +249,14 @@ public class Board implements Constants {
             piece[from] = EMPTY;
         }
 
-        /* back up information so we can take the move back later. */
+        /* back up information, so we can take the move back later. */
         um.mov = m;
-        um.capture = piece[(int) m.to];
+        um.capture = piece[m.to];
         um.castle = castle;
         um.ep = ep;
         um.fifty = fifty;
 
-        castle &= castle_mask[(int) m.from] & castle_mask[(int) m.to];
+        castle &= castle_mask[m.from] & castle_mask[m.to];
 
         if ((m.bits & 8) != 0) {
             if (side == LIGHT) {
@@ -274,14 +274,14 @@ public class Board implements Constants {
         }
 
         /* move the piece */
-        color[(int) m.to] = side;
+        color[m.to] = side;
         if ((m.bits & 32) != 0) {
-            piece[(int) m.to] = m.promote;
+            piece[m.to] = m.promote;
         } else {
-            piece[(int) m.to] = piece[(int) m.from];
+            piece[m.to] = piece[m.from];
         }
-        color[(int) m.from] = EMPTY;
-        piece[(int) m.from] = EMPTY;
+        color[m.from] = EMPTY;
+        piece[m.from] = EMPTY;
 
         /* erase the pawn if this is an en passant move */
         if ((m.bits & 4) != 0) {
@@ -314,18 +314,18 @@ public class Board implements Constants {
         ep = um.ep;
         fifty = um.fifty;
 
-        color[(int) m.from] = side;
+        color[m.from] = side;
         if ((m.bits & 32) != 0) {
-            piece[(int) m.from] = PAWN;
+            piece[m.from] = PAWN;
         } else {
-            piece[(int) m.from] = piece[(int) m.to];
+            piece[m.from] = piece[m.to];
         }
         if (um.capture == EMPTY) {
-            color[(int) m.to] = EMPTY;
-            piece[(int) m.to] = EMPTY;
+            color[m.to] = EMPTY;
+            piece[m.to] = EMPTY;
         } else {
-            color[(int) m.to] = xside;
-            piece[(int) m.to] = um.capture;
+            color[m.to] = xside;
+            piece[m.to] = um.capture;
         }
         if ((m.bits & 2) != 0) {
             int from;

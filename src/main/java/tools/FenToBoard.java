@@ -29,7 +29,7 @@ public class FenToBoard implements Constants {
                 row--;
                 col = 0;
             } else if (ch >= '1' && ch <= '8') {
-                int num = (int) (ch - '0');
+                int num = ch - '0';
                 if (col + num > 8) {
                     throw new IllegalArgumentException("Malformatted fen string: too many pieces in rank at index " + index + ": " + ch);
                 }
@@ -131,10 +131,11 @@ public class FenToBoard implements Constants {
         }
         /*========== 6th field : full move number ==========*/
         if (index + 1 < fen.length() && fen.charAt(index) == ' ') {
+            int i = 2 * (Integer.parseInt(fen.substring(index + 1)) - 1);
             if (board.side == LIGHT) {
-                setPlyNumber(2 * (Integer.parseInt(fen.substring(index + 1)) - 1));
+                setPlyNumber(i);
             } else {
-                setPlyNumber(2 * (Integer.parseInt(fen.substring(index + 1)) - 1) + 1);
+                setPlyNumber(i + 1);
             }
         } else {
             throw new IllegalArgumentException("Malformatted fen string: expected ply number at index " + index);
@@ -142,12 +143,6 @@ public class FenToBoard implements Constants {
 
         /*========== now check the produced position ==========*/
         // @TODO 
-//        try {
-//            pos.validate();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            throw new IllegalArgumentException("Malformatted fen string: " + e.getMessage());
-//        }
     }
 
     static void setPlyNumber(int plyNumber) {
@@ -173,7 +168,7 @@ public class FenToBoard implements Constants {
         return x < 0 ? -x : x;
     }
 
-    public static final int fenCharToStone(char ch) {
+    public static int fenCharToStone(char ch) {
         for (int stone = MIN_STONE; stone <= MAX_STONE; stone++) {
             if (fenChars[stone - MIN_STONE] == ch) {
                 return stone;
@@ -182,7 +177,7 @@ public class FenToBoard implements Constants {
         return NO_STONE;
     }
 
-    public static final int strToSqi(String s) {
+    public static int strToSqi(String s) {
         if (s == null || s.length() != 2) {
             return NO_SQUARE;
         }
@@ -198,23 +193,23 @@ public class FenToBoard implements Constants {
 
     }
 
-    public static final int charToCol(char ch) {
+    public static int charToCol(char ch) {
         if ((ch >= 'a') && (ch <= 'h')) {
-            return (int) (ch - 'a');
+            return ch - 'a';
         } else {
             return NO_COL;
         }
     }
 
-    public static final int charToRow(char ch) {
+    public static int charToRow(char ch) {
         if ((ch >= '1') && (ch <= '8')) {
-            return (int) (ch - '1');
+            return ch - '1';
         } else {
             return NO_ROW;
         }
     }
 
-    public static final char stoneToFenChar(int stone) {
+    public static char stoneToFenChar(int stone) {
         if (stone >= MIN_STONE && stone <= MAX_STONE) {
             return fenChars[stone - MIN_STONE];
         } else {
@@ -222,8 +217,5 @@ public class FenToBoard implements Constants {
         }
     }
 
-    /**
-     * @TODO cf ChessPresso
-     */
-//    public static String getFEN(PositionB pos) {}
+    //    public static String getFEN(PositionB pos) {}
 }
