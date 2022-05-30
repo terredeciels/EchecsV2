@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="HaskellBuildOptions">
+    <ghcPath>C:\Program Files\Haskell Platform\8.0.1\bin\ghc.exe</ghcPath>
+    <cabalPath>C:\Program Files\Haskell Platform\8.0.1\lib\extralibs\bin\cabal.exe</cabalPath>
+    <stackPath>C:\Users\Gilles\AppData\Roaming\Local\bin\stack.exe</stackPath>
+  </component>
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/pom.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectInspectionProfilesVisibleTreeState">
+    <entry key="Project Default">
+      <profile-state>
+        <expanded-state>
+          <State>
+            <id />
+          </State>
+          <State>
+            <id>CollectionsScala</id>
+          </State>
+          <State>
+            <id>Code StyleScala</id>
+          </State>
+          <State>
+            <id>Comparing CollectionsScala</id>
+          </State>
+          <State>
+            <id>GeneralScala</id>
+          </State>
+          <State>
+            <id>Indices CollectionsScala</id>
+          </State>
+          <State>
+            <id>Java</id>
+          </State>
+          <State>
+            <id>Maps CollectionsScala</id>
+          </State>
+          <State>
+            <id>Method signatureScala</id>
+          </State>
+          <State>
+            <id>Options CollectionsScala</id>
+          </State>
+          <State>
+            <id>Other CollectionsScala</id>
+          </State>
+          <State>
+            <id>Scala</id>
+          </State>
+          <State>
+            <id>ScaladocScala</id>
+          </State>
+          <State>
+            <id>Simplifications: filter and exists CollectionsScala</id>
+          </State>
+          <State>
+            <id>Simplifications: other CollectionsScala</id>
+          </State>
+          <State>
+            <id>Size CollectionsScala</id>
+          </State>
+          <State>
+            <id>Threading issuesJava</id>
+          </State>
+        </expanded-state>
+        <selected-state>
+          <State>
+            <id>Java</id>
+          </State>
+        </selected-state>
+      </profile-state>
+    </entry>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_18_PREVIEW" project-jdk-name="18" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/out" />
+  </component>
+</project>
