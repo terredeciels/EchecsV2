@@ -1,4 +1,4 @@
-package tscp;
+package board;
 
 /**
  * 1	capture 2	castle 4	en passant capture 8	pushing a pawn 2 squares 16	pawn

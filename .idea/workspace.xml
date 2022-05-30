@@ -4,13 +4,29 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1ac4d742-3573-4be4-a80a-8b611187df5f" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/tscp/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tscp/Board.java" afterDir="false" />
+    <list default="true" id="1ac4d742-3573-4be4-a80a-8b611187df5f" name="Changes" comment="nettoyage 1">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/board/Piece.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/perft/PerftCompare.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/perft/PerftCompare.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/perft/PerftSpeed.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/perft/PerftSpeed.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tools/FenToBoard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tools/FenToBoard.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tscp/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/board/Board.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tscp/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/board/Constants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tscp/Move.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/board/Move.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tscp/UndoMove.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/board/UndoMove.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -32,20 +48,29 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "last_opened_file_path": "C:/Users/gille/IdeaProjects/EchecsV2",
     "project.structure.last.edited": "Problems",
     "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.2"
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "editor.preferences.fonts.default"
   }
 }]]></component>
   <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="board" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\gille\IdeaProjects\TSCPJv1.5\src\main\java\perft" />
     </key>
+    <key name="MoveInnerDialog.RECENTS_KEY">
+      <recent name="board" />
+    </key>
   </component>
-  <component name="RunManager" selected="Application.PerftSpeed">
+  <component name="RunManager" selected="Application.PerftCompare">
     <configuration name="PerftCompare" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="perft.PerftCompare" />
       <module name="EchecsV2" />
@@ -74,6 +99,14 @@
       <option name="presentableId" value="Default" />
       <updated>1653932314477</updated>
     </task>
+    <task id="LOCAL-00001" summary="nettoyage 1">
+      <created>1653932945711</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1653932945711</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -86,5 +119,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="nettoyage 1" />
+    <option name="LAST_COMMIT_MESSAGE" value="nettoyage 1" />
   </component>
 </project>

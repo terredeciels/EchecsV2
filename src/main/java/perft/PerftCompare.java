@@ -1,8 +1,8 @@
 package perft;
 
-import tscp.Board;
-import tscp.Constants;
-import tscp.Move;
+import board.Board;
+import board.Constants;
+import board.Move;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -14,7 +14,7 @@ public class PerftCompare implements Constants {
 
     public static void main(String[] args) throws IOException {
         int maxDepth = 4;
-        FileReader fileReader = new FileReader("C:\\Users\\gille\\IdeaProjects\\TSCPJv1.5\\src\\main\\java\\perft\\perftsuite.epd");
+        FileReader fileReader = new FileReader("C:\\Users\\gille\\IdeaProjects\\EchecsV2\\src\\main\\java\\perft\\perftsuite.epd");
         BufferedReader reader = new BufferedReader(fileReader);
         String line;
         int passes = 0;

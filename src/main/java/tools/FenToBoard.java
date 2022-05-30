@@ -1,7 +1,7 @@
 package tools;
 
-import tscp.Board;
-import tscp.Constants;
+import board.Board;
+import board.Constants;
 
 public class FenToBoard implements Constants {
 

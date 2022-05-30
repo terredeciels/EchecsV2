@@ -1,4 +1,4 @@
-package tscp;
+package board;
 
 class UndoMove {
 

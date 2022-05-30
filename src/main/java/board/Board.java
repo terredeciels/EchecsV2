@@ -1,14 +1,18 @@
-package tscp;
+package board;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Board implements Constants {
+public class Board extends Piece implements Constants {
 
     public int[] color = new int[64];
     public int[] piece = new int[64];
+
+    public Piece[] pieces = new Piece[64];
+
     public int side;
     public int xside;
+
     public int castle;
     public int ep;
     public List<Move> pseudomoves = new ArrayList<>();
@@ -85,59 +89,44 @@ public class Board implements Constants {
     }
 
     public void gen() {
-        int i;
+        int c;
         int j;
         int n;
 
-        for (i = 0; i < 64; ++i) {
-            if (color[i] == side) {
-                if (piece[i] == PAWN) {
+        for (c = 0; c < 64; ++c) {
+            if (color[c] == side) {
+                if (piece[c] == PAWN) {
                     if (side == LIGHT) {
-                        if ((i & 7) != 0 && color[i - 9] == DARK) {
-                            gen_push(i, i - 9, 17);
+                        if ((c & 7) != 0 && color[c - 9] == DARK) {
+                            gen_push(c, c - 9, 17);
                         }
-                        if ((i & 7) != 7 && color[i - 7] == DARK) {
-                            gen_push(i, i - 7, 17);
+                        if ((c & 7) != 7 && color[c - 7] == DARK) {
+                            gen_push(c, c - 7, 17);
                         }
-                        if (color[i - 8] == EMPTY) {
-                            gen_push(i, i - 8, 16);
-                            if (i >= 48 && color[i - 16] == EMPTY) {
-                                gen_push(i, i - 16, 24);
+                        if (color[c - 8] == EMPTY) {
+                            gen_push(c, c - 8, 16);
+                            if (c >= 48 && color[c - 16] == EMPTY) {
+                                gen_push(c, c - 16, 24);
                             }
                         }
                     } else {
-                        if ((i & 7) != 0 && color[i + 7] == LIGHT) {
-                            gen_push(i, i + 7, 17);
+                        if ((c & 7) != 0 && color[c + 7] == LIGHT) {
+                            gen_push(c, c + 7, 17);
                         }
-                        if ((i & 7) != 7 && color[i + 9] == LIGHT) {
-                            gen_push(i, i + 9, 17);
+                        if ((c & 7) != 7 && color[c + 9] == LIGHT) {
+                            gen_push(c, c + 9, 17);
                         }
-                        if (color[i + 8] == EMPTY) {
-                            gen_push(i, i + 8, 16);
-                            if (i <= 15 && color[i + 16] == EMPTY) {
-                                gen_push(i, i + 16, 24);
+                        if (color[c + 8] == EMPTY) {
+                            gen_push(c, c + 8, 16);
+                            if (c <= 15 && color[c + 16] == EMPTY) {
+                                gen_push(c, c + 16, 24);
                             }
                         }
                     }
                 } else {
-                    for (j = 0; j < offsets[piece[i]]; ++j) {
-                        for (n = i;;) {
-                            n = mailbox[mailbox64[n] + offset[piece[i]][j]];
-                            if (n == -1) {
-                                break;
-                            }
-                            if (color[n] != EMPTY) {
-                                if (color[n] == xside) {
-                                    gen_push(i, n, 1);
-                                }
-                                break;
-                            }
-                            gen_push(i, n, 0);
-                            if (!slide[piece[i]]) {
-                                break;
-                            }
-                        }
-                    }
+                    // autres pieces que pions
+                    gen(c);
+                    //
                 }
             }
         }
@@ -174,6 +163,32 @@ public class Board implements Constants {
                 }
                 if ((ep & 7) != 7 && color[ep - 7] == DARK && piece[ep - 7] == PAWN) {
                     gen_push(ep - 7, ep, 21);
+                }
+            }
+        }
+
+    }
+
+    private void gen(int c) {
+        int p = piece[c];
+        Piece q = pieces[c];
+
+        for (int d = 0; d < offsets[p]; ++d) {
+            int _c = c;
+            while (true) {
+                _c = mailbox[mailbox64[_c] + offset[p][d]];
+                if (_c == -1) {
+                    break;
+                }
+                if (color[_c] != EMPTY) {
+                    if (color[_c] == xside) {
+                        gen_push(c, _c, 1);
+                    }
+                    break;
+                }
+                gen_push(c, _c, 0);
+                if (!slide[p]) {
+                    break;
                 }
             }
         }
