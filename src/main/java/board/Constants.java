@@ -15,6 +15,7 @@ public interface Constants {
     int LIGHT = 0;
     int DARK = 1;
 
+
     int A1 = 56;
     int B1 = 57;
     int C1 = 58;
@@ -62,6 +63,7 @@ public interface Constants {
 //
     int PAWN = 0, KNIGHT = 1, BISHOP = 2, ROOK = 3, QUEEN = 4, KING = 5;
     int EMPTY = 6;
+    int OUT = -1;
     boolean[] slide = {false, false, true, true, true, false};
     int[] offsets = {0, 8, 4, 4, 8, 8};
     int[] P = {0, 0, 0, 0, 0, 0, 0, 0};

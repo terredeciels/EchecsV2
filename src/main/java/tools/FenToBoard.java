@@ -153,7 +153,8 @@ public class FenToBoard implements Constants {
         board.side = side;
         board.xside = board.side == LIGHT ? DARK : LIGHT;
     }
-
+//    int PAWN = 0, KNIGHT = 1, BISHOP = 2, ROOK = 3, QUEEN = 4, KING = 5;
+//    int EMPTY = 6;
     static void setStone(int j, int i, int stone) {
         int _case = 56 - 8 * i + j;
         board.piece[_case]
@@ -162,6 +163,15 @@ public class FenToBoard implements Constants {
                 : abs(stone) == 5 ? 0 : abs(stone);
         board.color[_case]
                 = stone < 0 ? LIGHT : stone > 0 ? DARK : EMPTY;
+
+
+
+//        board.pieces[_case].code
+//                = abs(stone) == 0 ? 6
+//                : abs(stone) == 6 ? 5
+//                : abs(stone) == 5 ? 0 : abs(stone);
+//        board.pieces[_case].couleur
+//                = stone < 0 ? LIGHT : stone > 0 ? DARK : EMPTY;
     }
 
     static int abs(int x) {

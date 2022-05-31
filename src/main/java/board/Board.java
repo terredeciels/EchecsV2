@@ -9,6 +9,11 @@ public class Board extends Piece implements Constants {
     public int[] piece = new int[64];
 
     public Piece[] pieces = new Piece[64];
+    {
+        for (int c = 0; c < 64; c++) {
+            pieces[c] = new Piece();
+        }
+    }
 
     public int side;
     public int xside;
@@ -66,7 +71,7 @@ public class Board extends Piece implements Constants {
                     }
                 } else {
                     for (int j = 0; j < offsets[piece[i]]; ++j) {
-                        for (int n = i;;) {
+                        for (int n = i; ; ) {
                             n = mailbox[mailbox64[n] + offset[piece[i]][j]];
                             if (n == -1) {
                                 break;
@@ -89,11 +94,8 @@ public class Board extends Piece implements Constants {
     }
 
     public void gen() {
-        int c;
-        int j;
-        int n;
 
-        for (c = 0; c < 64; ++c) {
+        for (int c = 0; c < 64; ++c) {
             if (color[c] == side) {
                 if (piece[c] == PAWN) {
                     if (side == LIGHT) {
@@ -171,8 +173,22 @@ public class Board extends Piece implements Constants {
 
     private void gen(int c) {
         int p = piece[c];
-        Piece q = pieces[c];
-
+//
+//        Piece q = pieces[c];// init les pieces
+//
+//        for (int d = 0; d < q.nbdir; ++d) {
+//            int _c = c;
+//            while (true) {
+//                _c = fmailbox(q, _c, d);
+//                if (_c == OUT) break;
+//                if (q.couleur != EMPTY) {
+//                    if (q.couleur == xside) gen_push(c, _c, 1);
+//                    break;
+//                }
+//                gen_push(c, _c, 0);
+//                if (!q.glisse) break;
+//            }
+//        }
         for (int d = 0; d < offsets[p]; ++d) {
             int _c = c;
             while (true) {
@@ -192,6 +208,11 @@ public class Board extends Piece implements Constants {
                 }
             }
         }
+    }
+
+    private int fmailbox(Piece q, int _c, int d) {
+        int delta = q.dir[d];
+        return mailbox[mailbox64[_c] + delta];
     }
 
     private void gen_push(int from, int to, int bits) {
@@ -383,6 +404,7 @@ public class Board extends Piece implements Constants {
             }
         }
     }
+
     public String[] piece_char_light = {"P", "N", "B", "R", "Q", "K"};
     public String[] piece_char_dark = {"p", "n", "b", "r", "q", "k"};
 

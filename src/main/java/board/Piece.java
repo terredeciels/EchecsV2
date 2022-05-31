@@ -1,8 +1,8 @@
 package board;
 
 public class Piece {
-    int code;
-    int couleur;
+   public int code;
+   public int couleur;
     int nbdir;
     int[] dir;
     boolean glisse;

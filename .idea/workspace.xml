@@ -4,17 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1ac4d742-3573-4be4-a80a-8b611187df5f" name="Changes" comment="nettoyage 1">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/board/Piece.java" afterDir="false" />
+    <list default="true" id="1ac4d742-3573-4be4-a80a-8b611187df5f" name="Changes" comment="class Piece.java">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/perft/PerftCompare.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/perft/PerftCompare.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/perft/PerftSpeed.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/perft/PerftSpeed.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/board/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/board/Board.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/board/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/board/Constants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/board/Piece.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/board/Piece.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/tools/FenToBoard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tools/FenToBoard.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tscp/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/board/Board.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tscp/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/board/Constants.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tscp/Move.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/board/Move.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tscp/UndoMove.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/board/UndoMove.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,7 +46,7 @@
     "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "ignore.preview.features.used": "true",
     "last_opened_file_path": "C:/Users/gille/IdeaProjects/EchecsV2",
     "project.structure.last.edited": "Problems",
     "project.structure.proportion": "0.0",
@@ -106,7 +101,21 @@
       <option name="project" value="LOCAL" />
       <updated>1653932945711</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="class Piece.java">
+      <created>1653946264926</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1653946264926</updated>
+    </task>
+    <task id="LOCAL-00003" summary="class Piece.java">
+      <created>1653946278868</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1653946278868</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -122,6 +131,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="nettoyage 1" />
-    <option name="LAST_COMMIT_MESSAGE" value="nettoyage 1" />
+    <MESSAGE value="class Piece.java" />
+    <option name="LAST_COMMIT_MESSAGE" value="class Piece.java" />
   </component>
 </project>
