@@ -9,22 +9,23 @@ public class Board extends Piece implements Constants {
     public int[] piece = new int[64];
 
     public Piece[] pieces = new Piece[64];
+    public int side;
+    public int xside;
+    public int castle;
+    public int ep;
+    public List<Move> pseudomoves = new ArrayList<>();
+    public int halfMoveClock;
+    public int plyNumber;
+    public String[] piece_char_light = {"P", "N", "B", "R", "Q", "K"};
+    public String[] piece_char_dark = {"p", "n", "b", "r", "q", "k"};
+    private int fifty;
+    private UndoMove um = new UndoMove();
+
     {
         for (int c = 0; c < 64; c++) {
             pieces[c] = new Piece();
         }
     }
-
-    public int side;
-    public int xside;
-
-    public int castle;
-    public int ep;
-    public List<Move> pseudomoves = new ArrayList<>();
-    private int fifty;
-    private UndoMove um = new UndoMove();
-    public int halfMoveClock;
-    public int plyNumber;
 
     public Board() {
     }
@@ -42,11 +43,11 @@ public class Board extends Piece implements Constants {
     }
 
     private boolean in_check(int s) {
-        for (int i = 0; i < 64; ++i) {
-            if (piece[i] == KING && color[i] == s) {
+        for (int i = 0; i < 64; ++i)
+            if (piece[i] == KING && color[i] == s)
                 return attack(i, s ^ 1);
-            }
-        }
+
+
         return true; // shouldn't get here
     }
 
@@ -54,39 +55,54 @@ public class Board extends Piece implements Constants {
         for (int i = 0; i < 64; ++i) {
             if (color[i] == s) {
                 if (piece[i] == PAWN) {
-                    if (s == LIGHT) {
-                        if ((i & 7) != 0 && i - 9 == sq) {
-                            return true;
-                        }
-                        if ((i & 7) != 7 && i - 7 == sq) {
-                            return true;
-                        }
-                    } else {
-                        if ((i & 7) != 0 && i + 7 == sq) {
-                            return true;
-                        }
-                        if ((i & 7) != 7 && i + 9 == sq) {
-                            return true;
-                        }
-                    }
+
+                    int offset = (s == LIGHT) ? -8 : 8;
+                    if ((i & 7) != 0 && i + offset - 1 == sq) return true;
+                    if ((i & 7) != 7 && i + offset + 1 == sq) return true;
+
+//                    if (s == LIGHT) {
+//                        if ((i & 7) != 0 && i - 9 == sq) {
+//                            return true;
+//                        }
+//                        if ((i & 7) != 7 && i - 7 == sq) {
+//                            return true;
+//                        }
+//                    } else {
+//                        if ((i & 7) != 0 && i + 7 == sq) {
+//                            return true;
+//                        }
+//                        if ((i & 7) != 7 && i + 9 == sq) {
+//                            return true;
+//                        }
+//                    }
                 } else {
                     for (int j = 0; j < offsets[piece[i]]; ++j) {
-                        for (int n = i; ; ) {
+                        int n = i;
+                        while (true) {
                             n = mailbox[mailbox64[n] + offset[piece[i]][j]];
-                            if (n == -1) {
-                                break;
-                            }
-                            if (n == sq) {
-                                return true;
-                            }
-                            if (color[n] != EMPTY) {
-                                break;
-                            }
-                            if (!slide[piece[i]]) {
-                                break;
-                            }
+                            if (n == -1) break;
+                            if (n == sq) return true;
+                            if (color[n] != EMPTY) break;
+                            if (!slide[piece[i]]) break;
                         }
                     }
+//                    for (int j = 0; j < offsets[piece[i]]; ++j) {
+//                        for (int n = i; ; ) {
+//                            n = mailbox[mailbox64[n] + offset[piece[i]][j]];
+//                            if (n == -1) {
+//                                break;
+//                            }
+//                            if (n == sq) {
+//                                return true;
+//                            }
+//                            if (color[n] != EMPTY) {
+//                                break;
+//                            }
+//                            if (!slide[piece[i]]) {
+//                                break;
+//                            }
+//                        }
+//                    }
                 }
             }
         }
@@ -99,19 +115,28 @@ public class Board extends Piece implements Constants {
             if (color[c] == side) {
                 if (piece[c] == PAWN) {
                     if (side == LIGHT) {
-                        if ((c & 7) != 0 && color[c - 9] == DARK) {
-                            gen_push(c, c - 9, 17);
-                        }
-                        if ((c & 7) != 7 && color[c - 7] == DARK) {
-                            gen_push(c, c - 7, 17);
-                        }
+                        if ((c & 7) != 0 && color[c - 9] == DARK) gen_push(c, c - 9, 17);
+                        if ((c & 7) != 7 && color[c - 7] == DARK) gen_push(c, c - 7, 17);
                         if (color[c - 8] == EMPTY) {
                             gen_push(c, c - 8, 16);
-                            if (c >= 48 && color[c - 16] == EMPTY) {
-                                gen_push(c, c - 16, 24);
-                            }
+                            if (c >= 48 && color[c - 16] == EMPTY) gen_push(c, c - 16, 24);
                         }
-                    } else {
+                    }
+//                    if (side == LIGHT) {
+//                        if ((c & 7) != 0 && color[c - 9] == DARK) {
+//                            gen_push(c, c - 9, 17);
+//                        }
+//                        if ((c & 7) != 7 && color[c - 7] == DARK) {
+//                            gen_push(c, c - 7, 17);
+//                        }
+//                        if (color[c - 8] == EMPTY) {
+//                            gen_push(c, c - 8, 16);
+//                            if (c >= 48 && color[c - 16] == EMPTY) {
+//                                gen_push(c, c - 16, 24);
+//                            }
+//                        }
+//                    }
+                    else {
                         if ((c & 7) != 0 && color[c + 7] == LIGHT) {
                             gen_push(c, c + 7, 17);
                         }
@@ -404,9 +429,6 @@ public class Board extends Piece implements Constants {
             }
         }
     }
-
-    public String[] piece_char_light = {"P", "N", "B", "R", "Q", "K"};
-    public String[] piece_char_dark = {"p", "n", "b", "r", "q", "k"};
 
     public void print_board() {
         int i;
