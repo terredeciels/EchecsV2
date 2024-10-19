@@ -136,6 +136,8 @@ public class Board extends Piece implements Constants {
 //                            }
 //                        }
 //                    }
+
+
                     else {
                         if ((c & 7) != 0 && color[c + 7] == LIGHT) {
                             gen_push(c, c + 7, 17);
