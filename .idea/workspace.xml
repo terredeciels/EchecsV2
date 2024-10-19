@@ -5,8 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1ac4d742-3573-4be4-a80a-8b611187df5f" name="Changes" comment="class Board.java">
-      <changelist_data name="GB" email="" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/board/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/board/Board.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/board/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/board/Constants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/board/Piece.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/board/Piece.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/perft/PerftCompare.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/perft/PerftCompare.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/perft/PerftSpeed.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/perft/PerftSpeed.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tools/FenToBoard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tools/FenToBoard.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -87,7 +93,7 @@
       <recent name="board" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.PerftSpeed">
+  <component name="RunManager" selected="Application.PerftCompare">
     <configuration name="PerftCompare" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="perft.PerftCompare" />
       <module name="CP_FenToBoard" />
@@ -120,8 +126,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.PerftSpeed" />
         <item itemvalue="Application.PerftCompare" />
+        <item itemvalue="Application.PerftSpeed" />
       </list>
     </recent_temporary>
   </component>
@@ -171,7 +177,15 @@
       <option name="project" value="LOCAL" />
       <updated>1729353498919</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="class Board.java">
+      <option name="closed" value="true" />
+      <created>1729353586500</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1729353586500</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

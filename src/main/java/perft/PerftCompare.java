@@ -3,12 +3,12 @@ package perft;
 import board.Board;
 import board.Constants;
 import board.Move;
+import tools.FenToBoard;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
-import tools.FenToBoard;
 
 public class PerftCompare implements Constants {
 

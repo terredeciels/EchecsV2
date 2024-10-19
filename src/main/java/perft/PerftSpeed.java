@@ -1,9 +1,9 @@
 package perft;
 
-import perft.PerftCompare.PerftResult;
-import tools.FenToBoard;
 import board.Board;
 import board.Move;
+import perft.PerftCompare.PerftResult;
+import tools.FenToBoard;
 
 import java.util.List;
 
@@ -12,7 +12,8 @@ public class PerftSpeed {
     public static void main(String[] args) {
         perftTest();
     }
-//        0	1
+
+    //        0	1
 //        1	20
 //        2	400
 //        3	8,902
@@ -24,7 +25,7 @@ public class PerftSpeed {
 //        10	69,352,859,712,417
 //        11	2,097,651,003,696,806
     private static void perftTest() {
-        String[] resexpected = new String[]{"0", "20","400","8902","197281","4865609","119060324"};
+        String[] resexpected = new String[]{"0", "20", "400", "8902", "197281", "4865609", "119060324"};
         //voir https://www.chessprogramming.org/Perft_Results
         String f = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
         Board board = FenToBoard.toBoard(f);
@@ -34,8 +35,8 @@ public class PerftSpeed {
             PerftResult res = perft(new Board(board), depth);
             double t1 = System.nanoTime();
             System.out.println("Depth " + depth + " : " + (t1 - t0) / 1000000000 + " sec");
-            System.out.println("Count = " + res.moveCount+ "  /  "+ resexpected[depth]);
-            assert(Double.toString(res.moveCount).equals(resexpected[depth]));
+            System.out.println("Count = " + res.moveCount + "  /  " + resexpected[depth]);
+            assert (Double.toString(res.moveCount).equals(resexpected[depth]));
         }
 
     }

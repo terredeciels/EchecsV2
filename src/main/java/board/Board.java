@@ -139,18 +139,26 @@ public class Board extends Piece implements Constants {
 
 
                     else {
-                        if ((c & 7) != 0 && color[c + 7] == LIGHT) {
-                            gen_push(c, c + 7, 17);
-                        }
-                        if ((c & 7) != 7 && color[c + 9] == LIGHT) {
-                            gen_push(c, c + 9, 17);
-                        }
+                        if ((c & 7) != 7 && color[c + 9] == LIGHT) gen_push(c, c + 9, 17);
+                        if ((c & 7) != 0 && color[c + 7] == LIGHT) gen_push(c, c + 7, 17);
+
                         if (color[c + 8] == EMPTY) {
                             gen_push(c, c + 8, 16);
-                            if (c <= 15 && color[c + 16] == EMPTY) {
-                                gen_push(c, c + 16, 24);
-                            }
+                            if (c <= 15 && color[c + 16] == EMPTY) gen_push(c, c + 16, 24);
                         }
+
+//                        if ((c & 7) != 0 && color[c + 7] == LIGHT) {
+//                            gen_push(c, c + 7, 17);
+//                        }
+//                        if ((c & 7) != 7 && color[c + 9] == LIGHT) {
+//                            gen_push(c, c + 9, 17);
+//                        }
+//                        if (color[c + 8] == EMPTY) {
+//                            gen_push(c, c + 8, 16);
+//                            if (c <= 15 && color[c + 16] == EMPTY) {
+//                                gen_push(c, c + 16, 24);
+//                            }
+//                        }
                     }
                 } else {
                     // autres pieces que pions
@@ -162,38 +170,54 @@ public class Board extends Piece implements Constants {
 
         /* generate castle moves */
         if (side == LIGHT) {
-            if ((castle & 1) != 0) {
-                gen_push(E1, G1, 2);
-            }
-            if ((castle & 2) != 0) {
-                gen_push(E1, C1, 2);
-            }
+            if ((castle & 1) != 0) gen_push(E1, G1, 2);
+            if ((castle & 2) != 0) gen_push(E1, C1, 2);
         } else {
-            if ((castle & 4) != 0) {
-                gen_push(E8, G8, 2);
-            }
-            if ((castle & 8) != 0) {
-                gen_push(E8, C8, 2);
-            }
+            if ((castle & 4) != 0) gen_push(E8, G8, 2);
+            if ((castle & 8) != 0) gen_push(E8, C8, 2);
         }
+//        if (side == LIGHT) {
+//            if ((castle & 1) != 0) {
+//                gen_push(E1, G1, 2);
+//            }
+//            if ((castle & 2) != 0) {
+//                gen_push(E1, C1, 2);
+//            }
+//        } else {
+//            if ((castle & 4) != 0) {
+//                gen_push(E8, G8, 2);
+//            }
+//            if ((castle & 8) != 0) {
+//                gen_push(E8, C8, 2);
+//            }
+//        }
 
         /* generate en passant moves */
+
+
         if (ep != -1) {
             if (side == LIGHT) {
-                if ((ep & 7) != 0 && color[ep + 7] == LIGHT && piece[ep + 7] == PAWN) {
-                    gen_push(ep + 7, ep, 21);
-                }
-                if ((ep & 7) != 7 && color[ep + 9] == LIGHT && piece[ep + 9] == PAWN) {
-                    gen_push(ep + 9, ep, 21);
-                }
+                if ((ep & 7) != 0 && color[ep + 7] == LIGHT && piece[ep + 7] == PAWN) gen_push(ep + 7, ep, 21);
+                if ((ep & 7) != 7 && (color[ep + 9] == LIGHT && piece[ep + 9] == PAWN)) gen_push(ep + 9, ep, 21);
             } else {
-                if ((ep & 7) != 0 && color[ep - 9] == DARK && piece[ep - 9] == PAWN) {
-                    gen_push(ep - 9, ep, 21);
-                }
-                if ((ep & 7) != 7 && color[ep - 7] == DARK && piece[ep - 7] == PAWN) {
-                    gen_push(ep - 7, ep, 21);
-                }
+                if ((ep & 7) != 0 && (color[ep - 9] == DARK && piece[ep - 9] == PAWN)) gen_push(ep - 9, ep, 21);
+                if ((ep & 7) != 7 && (color[ep - 7] == DARK && piece[ep - 7] == PAWN)) gen_push(ep - 7, ep, 21);
             }
+//            if (side == LIGHT) {
+//                if ((ep & 7) != 0 && color[ep + 7] == LIGHT && piece[ep + 7] == PAWN) {
+//                    gen_push(ep + 7, ep, 21);
+//                }
+//                if ((ep & 7) != 7 && color[ep + 9] == LIGHT && piece[ep + 9] == PAWN) {
+//                    gen_push(ep + 9, ep, 21);
+//                }
+//            } else {
+//                if ((ep & 7) != 0 && color[ep - 9] == DARK && piece[ep - 9] == PAWN) {
+//                    gen_push(ep - 9, ep, 21);
+//                }
+//                if ((ep & 7) != 7 && color[ep - 7] == DARK && piece[ep - 7] == PAWN) {
+//                    gen_push(ep - 7, ep, 21);
+//                }
+//            }
         }
 
     }
@@ -217,23 +241,36 @@ public class Board extends Piece implements Constants {
 //            }
 //        }
         for (int d = 0; d < offsets[p]; ++d) {
+
             int _c = c;
             while (true) {
                 _c = mailbox[mailbox64[_c] + offset[p][d]];
-                if (_c == -1) {
-                    break;
-                }
+                if (_c == -1) break;
                 if (color[_c] != EMPTY) {
-                    if (color[_c] == xside) {
-                        gen_push(c, _c, 1);
-                    }
+                    if (color[_c] == xside) gen_push(c, _c, 1);
                     break;
                 }
                 gen_push(c, _c, 0);
-                if (!slide[p]) {
-                    break;
-                }
+                if (!slide[p]) break;
             }
+
+//            int _c = c;
+//            while (true) {
+//                _c = mailbox[mailbox64[_c] + offset[p][d]];
+//                if (_c == -1) {
+//                    break;
+//                }
+//                if (color[_c] != EMPTY) {
+//                    if (color[_c] == xside) {
+//                        gen_push(c, _c, 1);
+//                    }
+//                    break;
+//                }
+//                gen_push(c, _c, 0);
+//                if (!slide[p]) {
+//                    break;
+//                }
+//            }
         }
     }
 
@@ -243,20 +280,27 @@ public class Board extends Piece implements Constants {
     }
 
     private void gen_push(int from, int to, int bits) {
-        if ((bits & 16) != 0) {
-            if (side == LIGHT) {
-                if (to <= H8) {
-                    gen_promote(from, to, bits);
-                    return;
-                }
-            } else if (to >= A1) {
-                gen_promote(from, to, bits);
-                return;
-            }
+        if ((bits & 16) != 0 && (side == LIGHT ? to <= H8 : to >= A1)) {
+            gen_promote(from, to, bits);
+            return;
         }
         pseudomoves.add(new Move((byte) from, (byte) to, (byte) 0, (byte) bits));
-
     }
+//    private void gen_push(int from, int to, int bits) {
+//        if ((bits & 16) != 0) {
+//            if (side == LIGHT) {
+//                if (to <= H8) {
+//                    gen_promote(from, to, bits);
+//                    return;
+//                }
+//            } else if (to >= A1) {
+//                gen_promote(from, to, bits);
+//                return;
+//            }
+//        }
+//        pseudomoves.add(new Move((byte) from, (byte) to, (byte) 0, (byte) bits));
+//
+//    }
 
     private void gen_promote(int from, int to, int bits) {
         for (int i = KNIGHT; i <= QUEEN; ++i) {
