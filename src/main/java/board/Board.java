@@ -303,9 +303,8 @@ public class Board extends Piece implements Constants {
 //    }
 
     private void gen_promote(int from, int to, int bits) {
-        for (int i = KNIGHT; i <= QUEEN; ++i) {
+        for (int i = KNIGHT; i <= QUEEN; ++i)
             pseudomoves.add(new Move((byte) from, (byte) to, (byte) i, (byte) (bits | 32)));
-        }
     }
 
     public boolean makemove(Move m) {
@@ -313,9 +312,7 @@ public class Board extends Piece implements Constants {
             int from;
             int to;
 
-            if (in_check(side)) {
-                return false;
-            }
+            if (in_check(side)) return false;
             switch (m.to) {
                 case 62:
                     if (color[F1] != EMPTY || color[G1] != EMPTY || attack(F1, xside) || attack(G1, xside)) {
