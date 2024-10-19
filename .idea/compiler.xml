@@ -7,11 +7,9 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="CP_FenToBoard" />
-        <module name="EchecsV2" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="CP_FenToBoard" target="1.8" />
       <module name="EchecsV2" target="1.8" />
     </bytecodeTargetLevel>
   </component>

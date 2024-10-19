@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="HaskellBuildOptions">
     <ghcPath>C:\Program Files\Haskell Platform\8.0.1\bin\ghc.exe</ghcPath>
     <cabalPath>C:\Program Files\Haskell Platform\8.0.1\lib\extralibs\bin\cabal.exe</cabalPath>
@@ -76,7 +77,7 @@
       </profile-state>
     </entry>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_18_PREVIEW" project-jdk-name="18" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_20" project-jdk-name="openjdk-23" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
 </project>

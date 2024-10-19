@@ -5,11 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1ac4d742-3573-4be4-a80a-8b611187df5f" name="Changes" comment="class Piece.java">
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/board/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/board/Board.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/board/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/board/Constants.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/board/Piece.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/board/Piece.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tools/FenToBoard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tools/FenToBoard.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,6 +25,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "terredeciels"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/terredeciels/EchecsV2.git",
+    "accountId": "357be0c1-d3a4-4f28-9b9c-6b60a90b3f9c"
+  }
+}]]></component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/src/main/java/perft/PerftCompare.java" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/main/java/perft/perftsuite.epd" root0="FORCE_HIGHLIGHTING" />
@@ -33,6 +44,9 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 0
+}]]></component>
   <component name="ProjectId" id="29tVLkIy2Gi9rj1u8I5VLc7K54p" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -46,7 +60,10 @@
     "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "com.codeium.enabled": "true",
+    "git-widget-placeholder": "master",
     "ignore.preview.features.used": "true",
+    "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/gille/IdeaProjects/EchecsV2",
     "project.structure.last.edited": "Problems",
     "project.structure.proportion": "0.0",
@@ -65,17 +82,29 @@
       <recent name="board" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.PerftCompare">
-    <configuration name="PerftCompare" type="Application" factoryName="Application">
+  <component name="RunManager" selected="Application.PerftSpeed">
+    <configuration name="PerftCompare" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="perft.PerftCompare" />
-      <module name="EchecsV2" />
+      <module name="CP_FenToBoard" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="perft.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="PerftSpeed" type="Application" factoryName="Application">
+    <configuration name="PerftSpeed" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="perft.PerftSpeed" />
-      <module name="EchecsV2" />
+      <module name="CP_FenToBoard" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="perft.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -84,6 +113,12 @@
       <item itemvalue="Application.PerftCompare" />
       <item itemvalue="Application.PerftSpeed" />
     </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.PerftSpeed" />
+        <item itemvalue="Application.PerftCompare" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
