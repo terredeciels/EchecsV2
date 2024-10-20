@@ -5,10 +5,12 @@ import java.util.List;
 
 public class Board extends Piece implements Constants {
 
-    public int[] color = new int[64];
-    public int[] piece = new int[64];
 
-    public Piece[] pieces = new Piece[64];
+    public static final int BOARD_SIZE = 64;
+    public int[] color = new int[BOARD_SIZE];
+    public int[] piece = new int[BOARD_SIZE];
+
+    public Piece[] pieces = new Piece[BOARD_SIZE];
     public int side;
     public int xside;
     public int castle;
@@ -21,13 +23,20 @@ public class Board extends Piece implements Constants {
     private int fifty;
     private UndoMove um = new UndoMove();
 
-    {
-        for (int c = 0; c < 64; c++) {
-            pieces[c] = new Piece();
-        }
-    }
+//    {
+//        for (int c = 0; c < BOARD_SIZE; c++) {
+//            pieces[c] = new Piece();
+//        }
+//    }
 
     public Board() {
+        initPieces();
+    }
+
+    private void initPieces() {
+        for (int c = 0; c < BOARD_SIZE; c++) {
+            pieces[c] = new Piece();
+        }
     }
 
     public Board(Board board) {
@@ -43,7 +52,7 @@ public class Board extends Piece implements Constants {
     }
 
     private boolean in_check(int s) {
-        for (int i = 0; i < 64; ++i)
+        for (int i = 0; i < BOARD_SIZE; ++i)
             if (piece[i] == KING && color[i] == s)
                 return isAttacked(i, s ^ 1);
 
@@ -52,7 +61,7 @@ public class Board extends Piece implements Constants {
     }
 
     private boolean isAttacked(int sqTarget, int side) {
-        for (int sq = 0; sq < 64; ++sq) {
+        for (int sq = 0; sq < BOARD_SIZE; ++sq) {
             if (color[sq] == side && piece[sq] == PAWN) {
                 int offset = (side == LIGHT) ? -8 : 8;
                 if ((sq & 7) != 0 && sq + offset - 1 == sqTarget) return true;
@@ -71,31 +80,23 @@ public class Board extends Piece implements Constants {
     }
     public void gen() {
 
-        for (int c = 0; c < 64; ++c) {
+        for (int c = 0; c < BOARD_SIZE; ++c) {
             if (color[c] == side) {
                 if (piece[c] == PAWN) {
-                    if (side == LIGHT) {
-                        if ((c & 7) != 0 && color[c - 9] == DARK) gen_push(c, c - 9, 17);
-                        if ((c & 7) != 7 && color[c - 7] == DARK) gen_push(c, c - 7, 17);
-                        if (color[c - 8] == EMPTY) {
-                            gen_push(c, c - 8, 16);
-                            if (c >= 48 && color[c - 16] == EMPTY) gen_push(c, c - 16, 24);
-                        }
-                    } else {
-                        if ((c & 7) != 7 && color[c + 9] == LIGHT) gen_push(c, c + 9, 17);
-                        if ((c & 7) != 0 && color[c + 7] == LIGHT) gen_push(c, c + 7, 17);
+                    final int offset = (side == LIGHT) ? -8 : 8;
+                    final int oppositeColor = side ^ 1;
 
-                        if (color[c + 8] == EMPTY) {
-                            gen_push(c, c + 8, 16);
-                            if (c <= 15 && color[c + 16] == EMPTY) gen_push(c, c + 16, 24);
-                        }
+                    if ((c & 7) != 0 && color[c + offset - 1] == oppositeColor) gen_push(c, c + offset - 1, 17);
+                    if ((c & 7) != 7 && color[c + offset + 1] == oppositeColor) gen_push(c, c + offset + 1, 17);
 
+                    if (color[c + offset] == EMPTY) {
+                        gen_push(c, c + offset, 16);
+                        if ((side == LIGHT && c >= 48) || (side == DARK && c <= 15)) {
+                            if (color[c + (offset << 1)] == EMPTY) gen_push(c, c + (offset << 1), 24);
+                        }
                     }
-                }
-                else {
-                    // autres pieces que pions
+                } else {
                     gen(c);
-                    //
                 }
             }
         }
@@ -335,7 +336,7 @@ public class Board extends Piece implements Constants {
         int i;
 
         System.out.print("\n8 ");
-        for (i = 0; i < 64; ++i) {
+        for (i = 0; i < Board.BOARD_SIZE; ++i) {
             switch (color[i]) {
                 case EMPTY:
                     System.out.print(". ");
