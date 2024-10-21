@@ -2,9 +2,7 @@ package board;
 
 public interface Constants {
 
-    String START_POSITION = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     char[] fenChars = {'K', 'P', 'Q', 'R', 'B', 'N', '-', 'n', 'b', 'r', 'q', 'p', 'k'};
-    int NUM_OF_SQUARES = 64;
     int NO_CASTLES = 0,
             WHITE_LONG_CASTLE = 1,
             WHITE_SHORT_CASTLE = 2,
@@ -37,33 +35,12 @@ public interface Constants {
 
     int[] mailbox64 = {21, 22, 23, 24, 25, 26, 27, 28, 31, 32, 33, 34, 35, 36, 37, 38, 41, 42, 43, 44, 45, 46, 47, 48, 51, 52, 53, 54, 55, 56, 57, 58, 61, 62, 63, 64, 65, 66, 67, 68, 71, 72, 73, 74, 75, 76, 77, 78, 81, 82, 83, 84, 85, 86, 87, 88, 91, 92, 93, 94, 95, 96, 97, 98};
 
-    Piece Cavalier = new Piece(1, LIGHT, 8, new int[]{-21, -19, -12, -8, 8, 12, 19, 21}, false);
-    //
-//    class Pion extends Piece{
-//        int pion = 0;
-//        int offsets = 0;
-//        int[] offset = {0, 0, 0, 0, 0, 0, 0, 0};
-//        boolean slide = false;
-//
-//        public Pion(int code, int offsets, int[] offset, boolean slide) {
-//            super(code, offsets, offset, slide);
-//        }
-//    }
-//    class Cavalier extends Piece{
-//        int cavalier = 1;
-//        int[] offset = {-21, -19, -12, -8, 8, 12, 19, 21};
-//        int offsets = 8 ; //= offset.length;
-//        boolean slide = false;
-//
-//        public Cavalier(int code, int offsets, int[] offset, boolean slide) {
-//            super(code, offsets, offset, slide);
-//        }
-//    }
-//
-//
-    int PAWN = 0, KNIGHT = 1, BISHOP = 2, ROOK = 3, QUEEN = 4, KING = 5;
+    int PAWN = 0;
+    int KNIGHT = 1;
+    int ROOK = 3;
+    int QUEEN = 4;
+    int KING = 5;
     int EMPTY = 6;
-    int OUT = -1;
     boolean[] slide = {false, false, true, true, true, false};
     int[] offsets = {0, 8, 4, 4, 8, 8};
     int[] P = {0, 0, 0, 0, 0, 0, 0, 0};

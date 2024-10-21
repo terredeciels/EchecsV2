@@ -1,4 +1,4 @@
-package tools;
+package perft;
 
 import board.Board;
 import board.Constants;

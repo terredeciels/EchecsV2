@@ -3,7 +3,6 @@ package perft;
 import board.Board;
 import board.Constants;
 import board.Move;
-import tools.FenToBoard;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

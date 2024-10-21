@@ -3,7 +3,6 @@ package perft;
 import board.Board;
 import board.Move;
 import perft.PerftCompare.PerftResult;
-import tools.FenToBoard;
 
 import java.util.List;
 

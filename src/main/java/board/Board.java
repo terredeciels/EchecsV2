@@ -21,8 +21,6 @@ public class Board implements Constants {
     public List<Move> pseudomoves = new ArrayList<>();
     public int halfMoveClock;
     public int plyNumber;
-    public String[] piece_char_light = {"P", "N", "B", "R", "Q", "K"};
-    public String[] piece_char_dark = {"p", "n", "b", "r", "q", "k"};
     private int fifty;
     private UndoMove um = new UndoMove();
 
@@ -67,10 +65,10 @@ public class Board implements Constants {
             return (sq & 7) != 0 && sq + offset - 1 == sqTarget ||
                     (sq & 7) != 7 && sq + offset + 1 == sqTarget;
         } else return range(0, offsets[pieceType])
-                .anyMatch(o -> isAttackedByOffset(sq, sqTarget, pieceType, o, side));
+                .anyMatch(o -> isAttackedByOffset(sq, sqTarget, pieceType, o));
     }
 
-    private boolean isAttackedByOffset(int sq, int sqTarget, int pieceType, int offsetIndex, int side) {
+    private boolean isAttackedByOffset(int sq, int sqTarget, int pieceType, int offsetIndex) {
         int sqIndex = sq;
         while ((sqIndex = mailbox[mailbox64[sqIndex] + offset[pieceType][offsetIndex]]) != -1) {
             if (sqIndex == sqTarget) return true;
@@ -333,26 +331,4 @@ public class Board implements Constants {
         }
     }
 
-    public void print_board() {
-        int i;
-
-        System.out.print("\n8 ");
-        for (i = 0; i < Board.BOARD_SIZE; ++i) {
-            switch (color[i]) {
-                case EMPTY:
-                    System.out.print(". ");
-                    break;
-                case LIGHT:
-                    System.out.printf(piece_char_light[piece[i]] + " ");
-                    break;
-                case DARK:
-                    System.out.printf(piece_char_dark[piece[i]] + " ");
-                    break;
-            }
-            if ((i + 1) % 8 == 0 && i != 63) {
-                System.out.printf("\n%d ", 7 - (i >> 3));
-            }
-        }
-        System.out.print("\n\n   a b c d e f g h\n\n");
-    }
 }
