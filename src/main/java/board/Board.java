@@ -3,7 +3,10 @@ package board;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Board extends Piece implements Constants {
+import static java.lang.System.arraycopy;
+import static java.util.stream.IntStream.range;
+
+public class Board implements Constants {
 
 
     public static final int BOARD_SIZE = 64;
@@ -23,25 +26,14 @@ public class Board extends Piece implements Constants {
     private int fifty;
     private UndoMove um = new UndoMove();
 
-//    {
-//        for (int c = 0; c < BOARD_SIZE; c++) {
-//            pieces[c] = new Piece();
-//        }
-//    }
 
     public Board() {
         initPieces();
     }
 
-    private void initPieces() {
-        for (int c = 0; c < BOARD_SIZE; c++) {
-            pieces[c] = new Piece();
-        }
-    }
-
     public Board(Board board) {
-        color = board.color;
-        piece = board.piece;
+        arraycopy(board.color, 0, color, 0, BOARD_SIZE);
+        arraycopy(board.piece, 0, piece, 0, BOARD_SIZE);
         side = board.side;
         xside = board.xside;
         castle = board.castle;
@@ -51,68 +43,72 @@ public class Board extends Piece implements Constants {
         um = new UndoMove();
     }
 
+    private void initPieces() {
+        for (int c = 0; c < BOARD_SIZE; c++) {
+            pieces[c] = new Piece();
+        }
+    }
+
     private boolean in_check(int s) {
-        for (int i = 0; i < BOARD_SIZE; ++i)
-            if (piece[i] == KING && color[i] == s)
-                return isAttacked(i, s ^ 1);
-
-
-        return true; // shouldn't get here
+        return range(0, BOARD_SIZE)
+                .filter(i -> piece[i] == KING && color[i] == s)
+                .anyMatch(i -> isAttacked(i, s ^ 1));
     }
 
     private boolean isAttacked(int sqTarget, int side) {
-        for (int sq = 0; sq < BOARD_SIZE; ++sq) {
-            if (color[sq] == side && piece[sq] == PAWN) {
-                int offset = (side == LIGHT) ? -8 : 8;
-                if ((sq & 7) != 0 && sq + offset - 1 == sqTarget) return true;
-                if ((sq & 7) != 7 && sq + offset + 1 == sqTarget) return true;
-            } else if (color[sq] == side && piece[sq] != PAWN) {
-                for (int o = 0; o < offsets[piece[sq]]; ++o) {
-                    int sqIndex = sq;
-                    while ((sqIndex = mailbox[mailbox64[sqIndex] + offset[piece[sq]][o]]) != -1) {
-                        if (sqIndex == sqTarget) return true;
-                        if (color[sqIndex] != EMPTY || !slide[piece[sq]]) break;
-                    }
-                }
-            }
+        return range(0, BOARD_SIZE)
+                .filter(sq -> color[sq] == side)
+                .anyMatch(sq -> isAttackedByPiece(sq, sqTarget, piece[sq], side));
+    }
+
+    private boolean isAttackedByPiece(int sq, int sqTarget, int pieceType, int side) {
+        if (pieceType == PAWN) {
+            int offset = (side == LIGHT) ? -8 : 8;
+            return (sq & 7) != 0 && sq + offset - 1 == sqTarget ||
+                    (sq & 7) != 7 && sq + offset + 1 == sqTarget;
+        } else return range(0, offsets[pieceType])
+                .anyMatch(o -> isAttackedByOffset(sq, sqTarget, pieceType, o, side));
+    }
+
+    private boolean isAttackedByOffset(int sq, int sqTarget, int pieceType, int offsetIndex, int side) {
+        int sqIndex = sq;
+        while ((sqIndex = mailbox[mailbox64[sqIndex] + offset[pieceType][offsetIndex]]) != -1) {
+            if (sqIndex == sqTarget) return true;
+            if (color[sqIndex] != EMPTY || !slide[pieceType]) break;
         }
         return false;
     }
+
+
     public void gen() {
 
-        for (int c = 0; c < BOARD_SIZE; ++c) {
-            if (color[c] == side) {
-                if (piece[c] == PAWN) {
-                    final int offset = (side == LIGHT) ? -8 : 8;
-                    final int oppositeColor = side ^ 1;
+        range(0, BOARD_SIZE)
+                .filter(c -> color[c] == side)
+                .forEach(c -> {
+                    if (piece[c] == PAWN) gen_pawn(c);
+                    else gen(c);
+                });
+        gen_castles();
 
-                    if ((c & 7) != 0 && color[c + offset - 1] == oppositeColor) gen_push(c, c + offset - 1, 17);
-                    if ((c & 7) != 7 && color[c + offset + 1] == oppositeColor) gen_push(c, c + offset + 1, 17);
+        gen_enpassant();
 
-                    if (color[c + offset] == EMPTY) {
-                        gen_push(c, c + offset, 16);
-                        if ((side == LIGHT && c >= 48) || (side == DARK && c <= 15)) {
-                            if (color[c + (offset << 1)] == EMPTY) gen_push(c, c + (offset << 1), 24);
-                        }
-                    }
-                } else {
-                    gen(c);
-                }
-            }
+    }
+
+    private void gen_pawn(int c) {
+        final int offset = (side == LIGHT) ? -8 : 8;
+        final int oppositeColor = side ^ 1;
+
+        if ((c & 7) != 0 && color[c + offset - 1] == oppositeColor) gen_push(c, c + offset - 1, 17);
+        if ((c & 7) != 7 && color[c + offset + 1] == oppositeColor) gen_push(c, c + offset + 1, 17);
+
+        if (color[c + offset] == EMPTY) {
+            gen_push(c, c + offset, 16);
+            if ((side == LIGHT && c >= 48) || (side == DARK && c <= 15))
+                if (color[c + (offset << 1)] == EMPTY) gen_push(c, c + (offset << 1), 24);
         }
+    }
 
-        /* generate castle moves */
-        if (side == LIGHT) {
-            if ((castle & 1) != 0) gen_push(E1, G1, 2);
-            if ((castle & 2) != 0) gen_push(E1, C1, 2);
-        } else {
-            if ((castle & 4) != 0) gen_push(E8, G8, 2);
-            if ((castle & 8) != 0) gen_push(E8, C8, 2);
-        }
-
-        /* generate en passant moves */
-
-
+    private void gen_enpassant() {
         if (ep != -1) {
             if (side == LIGHT) {
                 if ((ep & 7) != 0 && color[ep + 7] == LIGHT && piece[ep + 7] == PAWN) gen_push(ep + 7, ep, 21);
@@ -123,7 +119,16 @@ public class Board extends Piece implements Constants {
             }
 
         }
+    }
 
+    private void gen_castles() {
+        if (side == LIGHT) {
+            if ((castle & 1) != 0) gen_push(E1, G1, 2);
+            if ((castle & 2) != 0) gen_push(E1, C1, 2);
+        } else {
+            if ((castle & 4) != 0) gen_push(E8, G8, 2);
+            if ((castle & 8) != 0) gen_push(E8, C8, 2);
+        }
     }
 
     private void gen(int c) {
