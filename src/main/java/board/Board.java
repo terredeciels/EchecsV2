@@ -152,10 +152,6 @@ public class Board implements Constants {
         }
     }
 
-//    private int fmailbox(Piece q, int _c, int d) {
-//        int delta = q.dir[d];
-//        return mailbox[mailbox64[_c] + delta];
-//    }
 
     private void gen_push(int from, int to, int bits) {
         if ((bits & 16) != 0 && (side == LIGHT ? to <= H8 : to >= A1)) {
