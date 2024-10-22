@@ -220,40 +220,21 @@ public class Board implements Constants {
 
         castle &= castle_mask[m.from] & castle_mask[m.to];
 
-        if ((m.bits & 8) != 0) {
-            if (side == LIGHT) {
-                ep = m.to + 8;
-            } else {
-                ep = m.to - 8;
-            }
-        } else {
-            ep = -1;
-        }
-        if ((m.bits & 17) != 0) {
-            fifty = 0;
-        } else {
-            ++fifty;
-        }
+        if ((m.bits & 8) != 0) ep = side == LIGHT ? m.to + 8 : m.to - 8;
+        else ep = -1;
+
+        fifty = (m.bits & 17) != 0 ? 0 : fifty + 1;
 
         /* move the piece */
         color[m.to] = side;
-        if ((m.bits & 32) != 0) {
-            piece[m.to] = m.promote;
-        } else {
-            piece[m.to] = piece[m.from];
-        }
+        piece[m.to] = (m.bits & 32) != 0 ? m.promote : piece[m.from];
         color[m.from] = EMPTY;
         piece[m.from] = EMPTY;
 
         /* erase the pawn if this is an en passant move */
         if ((m.bits & 4) != 0) {
-            if (side == LIGHT) {
-                color[m.to + 8] = EMPTY;
-                piece[m.to + 8] = EMPTY;
-            } else {
-                color[m.to - 8] = EMPTY;
-                piece[m.to - 8] = EMPTY;
-            }
+            int offset = (side == LIGHT) ? 8 : -8;
+            color[m.to + offset] = piece[m.to + offset] = EMPTY;
         }
 
         side ^= 1;
