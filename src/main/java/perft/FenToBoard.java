@@ -96,7 +96,7 @@ public class FenToBoard implements Constants {
                     index++;
                 }
             }
-            board.castle = (castles & 1) == 1 ? 2 : 0;
+            board.castle =(castles & 1) == 1 ? 2 : 0;
             board.castle += (castles & 2) == 2 ? 1 : 0;
             board.castle += (castles & 4) == 4 ? 8 : 0;
             board.castle += (castles & 8) == 8 ? 4 : 0;
