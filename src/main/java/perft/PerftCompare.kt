@@ -50,7 +50,7 @@ object PerftCompare : Constants {
     }
 
     internal class PerftResult {
-        var timeTaken: Long = 0
+
         @JvmField
         var moveCount: Long = 0
     }

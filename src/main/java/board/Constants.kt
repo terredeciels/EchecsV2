@@ -1,6 +1,9 @@
 package board
 
+
 interface Constants {
+
+
     companion object {
         val fenChars: CharArray = charArrayOf('K', 'P', 'Q', 'R', 'B', 'N', '-', 'n', 'b', 'r', 'q', 'p', 'k')
         const val NO_CASTLES: Int = 0
@@ -233,12 +236,12 @@ interface Constants {
         const val EMPTY: Int = 6
         val slide: BooleanArray = booleanArrayOf(false, false, true, true, true, false)
         val offsets: IntArray = intArrayOf(0, 8, 4, 4, 8, 8)
-        val P: IntArray = intArrayOf(0, 0, 0, 0, 0, 0, 0, 0)
-        val C: IntArray = intArrayOf(-21, -19, -12, -8, 8, 12, 19, 21)
-        val F: IntArray = intArrayOf(-11, -9, 9, 11, 0, 0, 0, 0)
-        val T: IntArray = intArrayOf(-10, -1, 1, 10, 0, 0, 0, 0)
-        val D: IntArray = intArrayOf(-11, -10, -9, -1, 1, 9, 10, 11)
-        val R: IntArray = intArrayOf(-11, -10, -9, -1, 1, 9, 10, 11)
+        private val P: IntArray = intArrayOf(0, 0, 0, 0, 0, 0, 0, 0)
+        private val C: IntArray = intArrayOf(-21, -19, -12, -8, 8, 12, 19, 21)
+        private val F: IntArray = intArrayOf(-11, -9, 9, 11, 0, 0, 0, 0)
+        private val T: IntArray = intArrayOf(-10, -1, 1, 10, 0, 0, 0, 0)
+        private val D: IntArray = intArrayOf(-11, -10, -9, -1, 1, 9, 10, 11)
+        private val R: IntArray = intArrayOf(-11, -10, -9, -1, 1, 9, 10, 11)
 
         val offset: Array<IntArray> = arrayOf(P, C, F, T, D, R)
 

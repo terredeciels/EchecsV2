@@ -4,21 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1ac4d742-3573-4be4-a80a-8b611187df5f" name="Changes" comment="class Board.java">
-      <change afterPath="$PROJECT_DIR$/src/main/java/board/Constants.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/board/Move.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/board/Piece.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/board/UndoMove.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/perft/FenToBoard.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/perft/PerftCompare.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/perft/PerftSpeed.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/board/Constants.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/board/Move.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/board/Piece.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/board/UndoMove.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/perft/FenToBoard.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/perft/PerftCompare.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/perft/PerftSpeed.java" beforeDir="false" />
+    <list default="true" id="1ac4d742-3573-4be4-a80a-8b611187df5f" name="Changes" comment="Kotlin">
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/board/Board.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/board/Board.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/board/Constants.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/board/Constants.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/board/Move.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/board/Piece.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/board/UndoMove.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/perft/FenToBoard.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/perft/FenToBoard.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/perft/PerftCompare.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/perft/PerftCompare.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,6 +55,9 @@
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectCodeStyleSettingsMigration">
     <option name="version" value="2" />
@@ -105,7 +105,7 @@
   <component name="RunManager" selected="Application.PerftCompare">
     <configuration name="PerftCompare" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="perft.PerftCompare" />
-      <module name="CP_FenToBoard" />
+      <module name="ChessMovesGenerator" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="perft.*" />
@@ -118,7 +118,7 @@
     </configuration>
     <configuration name="PerftSpeed" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="perft.PerftSpeed" />
-      <module name="CP_FenToBoard" />
+      <module name="ChessMovesGenerator" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="perft.*" />
@@ -129,14 +129,27 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="ChessMovesGenerator" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="ChessMovesGenerator" />
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <list>
       <item itemvalue="Application.PerftCompare" />
       <item itemvalue="Application.PerftSpeed" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.PerftCompare" />
         <item itemvalue="Application.PerftSpeed" />
+        <item itemvalue="Application.PerftCompare" />
       </list>
     </recent_temporary>
   </component>
@@ -297,7 +310,15 @@
       <option name="project" value="LOCAL" />
       <updated>1730637711340</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="Kotlin">
+      <option name="closed" value="true" />
+      <created>1730638362331</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1730638362331</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -305,7 +326,19 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="origin/detached" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
@@ -317,6 +350,7 @@
     <MESSAGE value="nettoyage 1" />
     <MESSAGE value="class Piece.java" />
     <MESSAGE value="class Board.java" />
-    <option name="LAST_COMMIT_MESSAGE" value="class Board.java" />
+    <MESSAGE value="Kotlin" />
+    <option name="LAST_COMMIT_MESSAGE" value="Kotlin" />
   </component>
 </project>

@@ -148,15 +148,15 @@ object FenToBoard : Constants {
     fun setStone(j: Int, i: Int, stone: Int) {
         val _case = 56 - 8 * i + j
         board!!.piece[_case] =
-       if (abs(stone) == 0)
-            6
-        else
-            if (abs(stone) == 6)
-                5
+            if (abs(stone) == 0)
+                6
             else
-                if (abs(stone) == 5) 0 else abs(stone)
+                if (abs(stone) == 6)
+                    5
+                else
+                    if (abs(stone) == 5) 0 else abs(stone)
         board!!.color[_case] =
-        if (stone < 0) Constants.Companion.LIGHT else if (stone > 0) Constants.Companion.DARK else Constants.Companion.EMPTY
+            if (stone < 0) Constants.Companion.LIGHT else if (stone > 0) Constants.Companion.DARK else Constants.Companion.EMPTY
 
 
         //        board.pieces[_case].code
@@ -207,13 +207,13 @@ object FenToBoard : Constants {
         return if ((ch >= '1') && (ch <= '8')) {
             ch.code - '1'.code
         } else {
-        Constants.NO_ROW
+            Constants.NO_ROW
         }
     }
 
     fun stoneToFenChar(stone: Int): Char {
         return if (stone >= Constants.Companion.MIN_STONE && stone <= Constants.Companion.MAX_STONE) {
-          Constants.Companion.fenChars.get(stone - Constants.Companion.MIN_STONE)
+            Constants.Companion.fenChars.get(stone - Constants.Companion.MIN_STONE)
         } else {
             '?'
         }

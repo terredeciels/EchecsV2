@@ -2,25 +2,61 @@ package board
 
 import java.util.stream.IntStream
 
+class Piece
+/**
+ * 1	capture 2	castle 4	en passant capture 8	pushing a pawn 2 squares 16	pawn
+ * move 32	promote
+ */
+class Move {
+    var from: Byte = 0
+    var to: Byte = 0
+    var promote: Byte = 0
+    var bits: Byte = 0
+
+    internal constructor()
+
+    internal constructor(from: Byte, to: Byte, promote: Byte, bits: Byte) {
+        this.from = from
+        this.to = to
+        this.promote = promote
+        this.bits = bits
+    }
+}
+
+internal class UndoMove {
+    var mov: Move = Move()
+    var capture: Int = 0
+    var castle: Int = 0
+    var ep: Int = 0
+    var fifty: Int = 0 //public int hash;
+}
 class Board : Constants {
     @JvmField
     var color: IntArray = IntArray(BOARD_SIZE)
+
     @JvmField
     var piece: IntArray = IntArray(BOARD_SIZE)
 
-    var pieces: Array<Piece?> = arrayOfNulls(BOARD_SIZE)
+    private var pieces = arrayOfNulls<Piece>(BOARD_SIZE)
+
     @JvmField
     var side: Int = 0
+
     @JvmField
     var xside: Int = 0
+
     @JvmField
     var castle: Int = 0
+
     @JvmField
     var ep: Int = 0
+
     @JvmField
     var pseudomoves: MutableList<Move> = ArrayList()
+
     @JvmField
     var halfMoveClock: Int = 0
+
     @JvmField
     var plyNumber: Int = 0
     private var fifty = 0
@@ -47,12 +83,6 @@ class Board : Constants {
         for (c in 0 until BOARD_SIZE) {
             pieces[c] = Piece()
         }
-    }
-
-    private fun in_check(s: Int): Boolean {
-        return IntStream.range(0, BOARD_SIZE)
-            .filter { i: Int -> piece[i] == Constants.KING && color[i] == s }
-            .anyMatch { i: Int -> isAttacked(i, s xor 1) }
     }
 
     private fun isAttacked(sqTarget: Int, side: Int): Boolean {
@@ -100,23 +130,23 @@ class Board : Constants {
         IntStream.range(0, BOARD_SIZE)
             .filter { c: Int -> color[c] == side }
             .forEach { c: Int ->
-                if (piece[c] == Constants.PAWN) gen_pawn(c)
+                if (piece[c] == Constants.PAWN) genPawn(c)
                 else gen(c)
             }
-        gen_castles()
-        gen_enpassant()
+        genCastles()
+        genEnpassant()
     }
 
-    private fun gen_pawn(c: Int) {
+    private fun genPawn(c: Int) {
         val offset = if ((side == Constants.LIGHT)) -8 else 8
         val oppositeColor = side xor 1
 
-        if ((c and 7) != 0 && color[c + offset - 1] == oppositeColor) gen_push(c, c + offset - 1, 17)
-        if ((c and 7) != 7 && color[c + offset + 1] == oppositeColor) gen_push(c, c + offset + 1, 17)
+        if ((c and 7) != 0 && color[c + offset - 1] == oppositeColor) genPush(c, c + offset - 1, 17)
+        if ((c and 7) != 7 && color[c + offset + 1] == oppositeColor) genPush(c, c + offset + 1, 17)
 
         if (color[c + offset] == Constants.EMPTY) {
-            gen_push(c, c + offset, 16)
-            if ((side == Constants.LIGHT && c >= 48) || (side == Constants.DARK && c <= 15)) if (color[c + (offset shl 1)] == Constants.EMPTY) gen_push(
+            genPush(c, c + offset, 16)
+            if ((side == Constants.LIGHT && c >= 48) || (side == Constants.DARK && c <= 15)) if (color[c + (offset shl 1)] == Constants.EMPTY) genPush(
                 c,
                 c + (offset shl 1),
                 24
@@ -124,26 +154,26 @@ class Board : Constants {
         }
     }
 
-    private fun gen_enpassant() {
+    private fun genEnpassant() {
         if (ep != -1) {
             if (side == Constants.LIGHT) {
-                if ((ep and 7) != 0 && color[ep + 7] == Constants.LIGHT && piece[ep + 7] == Constants.PAWN) gen_push(
+                if ((ep and 7) != 0 && color[ep + 7] == Constants.LIGHT && piece[ep + 7] == Constants.PAWN) genPush(
                     ep + 7,
                     ep,
                     21
                 )
-                if ((ep and 7) != 7 && (color[ep + 9] == Constants.LIGHT && piece[ep + 9] == Constants.PAWN)) gen_push(
+                if ((ep and 7) != 7 && (color[ep + 9] == Constants.LIGHT && piece[ep + 9] == Constants.PAWN)) genPush(
                     ep + 9,
                     ep,
                     21
                 )
             } else {
-                if ((ep and 7) != 0 && (color[ep - 9] == Constants.DARK && piece[ep - 9] == Constants.PAWN)) gen_push(
+                if ((ep and 7) != 0 && (color[ep - 9] == Constants.DARK && piece[ep - 9] == Constants.PAWN)) genPush(
                     ep - 9,
                     ep,
                     21
                 )
-                if ((ep and 7) != 7 && (color[ep - 7] == Constants.DARK && piece[ep - 7] == Constants.PAWN)) gen_push(
+                if ((ep and 7) != 7 && (color[ep - 7] == Constants.DARK && piece[ep - 7] == Constants.PAWN)) genPush(
                     ep - 7,
                     ep,
                     21
@@ -152,13 +182,13 @@ class Board : Constants {
         }
     }
 
-    private fun gen_castles() {
+    private fun genCastles() {
         if (side == Constants.LIGHT) {
-            if ((castle and 1) != 0) gen_push(Constants.E1, Constants.G1, 2)
-            if ((castle and 2) != 0) gen_push(Constants.E1, Constants.C1, 2)
+            if ((castle and 1) != 0) genPush(Constants.E1, Constants.G1, 2)
+            if ((castle and 2) != 0) genPush(Constants.E1, Constants.C1, 2)
         } else {
-            if ((castle and 4) != 0) gen_push(Constants.E8, Constants.G8, 2)
-            if ((castle and 8) != 0) gen_push(Constants.E8, Constants.C8, 2)
+            if ((castle and 4) != 0) genPush(Constants.E8, Constants.G8, 2)
+            if ((castle and 8) != 0) genPush(Constants.E8, Constants.C8, 2)
         }
     }
 
@@ -166,31 +196,31 @@ class Board : Constants {
         val p = piece[c]
 
         for (d in 0 until Constants.offsets[p]) {
-            var _c = c
+            var to = c
             while (true) {
-                _c = Constants.mailbox[Constants.mailbox64[_c] + Constants.offset[p][d]]
-                if (_c == -1) break
-                if (color[_c] != Constants.EMPTY) {
-                    if (color[_c] == xside) gen_push(c, _c, 1)
+                to = Constants.mailbox[Constants.mailbox64[to] + Constants.offset[p][d]]
+                if (to == -1) break
+                if (color[to] != Constants.EMPTY) {
+                    if (color[to] == xside) genPush(c, to, 1)
                     break
                 }
-                gen_push(c, _c, 0)
+                genPush(c, to, 0)
                 if (!Constants.slide[p]) break
             }
         }
     }
 
 
-    private fun gen_push(from: Int, to: Int, bits: Int) {
+    private fun genPush(from: Int, to: Int, bits: Int) {
         if ((bits and 16) != 0 && (if (side == Constants.LIGHT) to <= Constants.H8 else to >= Constants.A1)) {
-            gen_promote(from, to, bits)
+            genPromote(from, to, bits)
             return
         }
         pseudomoves.add(Move(from.toByte(), to.toByte(), 0.toByte(), bits.toByte()))
     }
 
 
-    private fun gen_promote(from: Int, to: Int, bits: Int) {
+    private fun genPromote(from: Int, to: Int, bits: Int) {
         for (i in Constants.KNIGHT..Constants.QUEEN) pseudomoves.add(
             Move(
                 from.toByte(),
@@ -206,7 +236,7 @@ class Board : Constants {
             val from: Int
             val to: Int
 
-            if (in_check(side)) return false
+            if (inCheck(this, side)) return false
             when (m.to) {
                 62.toByte() -> {
                     if (color[Constants.F1] != Constants.EMPTY || color[Constants.G1] != Constants.EMPTY || isAttacked(
@@ -292,7 +322,7 @@ class Board : Constants {
 
         side = side xor 1
         xside = xside xor 1
-        if (in_check(xside)) {
+        if (inCheck(this, xside)) {
             takeback()
             return false
         }
@@ -370,5 +400,11 @@ class Board : Constants {
 
     companion object {
         const val BOARD_SIZE: Int = 64
+    }
+
+    private fun inCheck(board: Board, s: Int): Boolean {
+        return IntStream.range(0, BOARD_SIZE)
+            .filter { i: Int -> board.piece[i] == Constants.KING && board.color[i] == s }
+            .anyMatch { i: Int -> board.isAttacked(i, s xor 1) }
     }
 }
