@@ -1,11 +1,9 @@
-package board;
+package board
 
-class UndoMove {
-
-    Move mov = new Move();
-    int capture;
-    int castle;
-    int ep;
-    int fifty;
-    //public int hash;
+internal class UndoMove {
+    var mov: Move = Move()
+    var capture: Int = 0
+    var castle: Int = 0
+    var ep: Int = 0
+    var fifty: Int = 0 //public int hash;
 }

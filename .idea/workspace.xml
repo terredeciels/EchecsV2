@@ -5,8 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1ac4d742-3573-4be4-a80a-8b611187df5f" name="Changes" comment="class Board.java">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/perft/PerftSpeed.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/perft/PerftSpeed.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/board/Constants.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/board/Move.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/board/Piece.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/board/UndoMove.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/perft/FenToBoard.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/perft/PerftCompare.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/perft/PerftSpeed.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/board/Constants.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/board/Move.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/board/Piece.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/board/UndoMove.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/perft/FenToBoard.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/perft/PerftCompare.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/perft/PerftSpeed.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -277,7 +289,15 @@
       <option name="project" value="LOCAL" />
       <updated>1729603032697</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="class Board.java">
+      <option name="closed" value="true" />
+      <created>1730637711340</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1730637711340</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

@@ -1,172 +1,165 @@
-package perft;
+package perft
 
-import board.Board;
-import board.Constants;
+import board.Board
 
-public class FenToBoard implements Constants {
+import board.Constants
 
-    private static Board board;
+object FenToBoard : Constants {
+    private var board: Board? = null
 
-    public static Board toBoard(String fen) {
-        board = new Board();
-        initFromFEN(fen, true);
-        return board;
+    @JvmStatic
+    fun toBoard(fen: String): Board? {
+        board = Board()
+        initFromFEN(fen, true)
+        return board
     }
 
-    private static void initFromFEN(String fen, boolean strict) throws IllegalArgumentException {
+    @Throws(IllegalArgumentException::class)
+    private fun initFromFEN(fen: String, strict: Boolean) {
         // pos.clear(); // TODO ?
-        int index = 0;
-        char ch;
+        var index = 0
+        var ch: Char
         /*========== 1st field : pieces ==========*/
-        int row = 7;
-        int col = 0;
-        while (index < fen.length() && fen.charAt(index) != ' ') {
-            ch = fen.charAt(index);
+        var row = 7
+        var col = 0
+        while (index < fen.length && fen[index] != ' ') {
+            ch = fen[index]
             if (ch == '/') {
-                if (col != 8) {
-                    throw new IllegalArgumentException("Malformatted fen string: unexpected '/' found at index " + index);
-                }
-                row--;
-                col = 0;
+                require(col == 8) { "Malformatted fen string: unexpected '/' found at index $index" }
+                row--
+                col = 0
             } else if (ch >= '1' && ch <= '8') {
-                int num = ch - '0';
-                if (col + num > 8) {
-                    throw new IllegalArgumentException("Malformatted fen string: too many pieces in rank at index " + index + ": " + ch);
-                }
-                for (int j = 0; j < num; j++) {
+                val num = ch.code - '0'.code
+                require(col + num <= 8) { "Malformatted fen string: too many pieces in rank at index $index: $ch" }
+                for (j in 0 until num) {
                     // int _case = coorToSqi(col, row);
-                    setStone(col, row, NO_STONE);
+                    setStone(col, row, Constants.NO_STONE.toInt())
 
-                    col++;
+                    col++
                 }
             } else {
-                int stone = fenCharToStone(ch);
-                if (stone == NO_STONE) {
-                    throw new IllegalArgumentException("Malformatted fen string: illegal piece char: " + ch);
-                }
+                val stone = fenCharToStone(ch)
+                require(stone != Constants.Companion.NO_STONE.toInt()) { "Malformatted fen string: illegal piece char: $ch" }
                 //  int _case = coorToSqi(col, row);
-                setStone(col, row, stone);
-                col++;
+                setStone(col, row, stone)
+                col++
             }
-            index++;
+            index++
         }
-        if (row != 0 || col != 8) {
-            throw new IllegalArgumentException("Malformatted fen string: missing pieces at index: " + index);
-        }
+        require(!(row != 0 || col != 8)) { "Malformatted fen string: missing pieces at index: $index" }
         /*========== 2nd field : to play ==========*/
-        if (index + 1 < fen.length() && fen.charAt(index) == ' ') {
-            ch = fen.charAt(index + 1);
-            switch (ch) {
-                case 'w':
-                    setToPlay(LIGHT);
-                    break;
-                case 'b':
-                    setToPlay(DARK);
-                    break;
-                default:
-                    throw new IllegalArgumentException("Malformatted fen string: expected 'to play' as second field but found " + ch);
+        if (index + 1 < fen.length && fen[index] == ' ') {
+            ch = fen[index + 1]
+            when (ch) {
+                'w' -> setToPlay(Constants.Companion.LIGHT)
+                'b' -> setToPlay(Constants.Companion.DARK)
+                else -> throw IllegalArgumentException("Malformatted fen string: expected 'to play' as second field but found $ch")
             }
-            index += 2;
+            index += 2
         }
         /*========== 3rd field : castles ==========*/
-        if (index + 1 < fen.length() && fen.charAt(index) == ' ') {
-            index++;
-            int castles = NO_CASTLES;
-            if (fen.charAt(index) == '-') {
-                index++;
+        if (index + 1 < fen.length && fen[index] == ' ') {
+            index++
+            var castles: Int = Constants.Companion.NO_CASTLES
+            if (fen[index] == '-') {
+                index++
             } else {
-                int last = -1;
-                while (index < fen.length() && fen.charAt(index) != ' ') {
-                    ch = fen.charAt(index);
+                var last = -1
+                while (index < fen.length && fen[index] != ' ') {
+                    ch = fen[index]
                     if (ch == 'K') {
-                        castles |= WHITE_SHORT_CASTLE;
-                        last = 0;
+                        castles = castles or Constants.Companion.WHITE_SHORT_CASTLE
+                        last = 0
                     } else if (ch == 'Q' && (!strict || last < 1)) {
-                        castles |= WHITE_LONG_CASTLE;
-                        last = 1;
+                        castles = castles or Constants.Companion.WHITE_LONG_CASTLE
+                        last = 1
                     } else if (ch == 'k' && (!strict || last < 2)) {
-                        castles |= BLACK_SHORT_CASTLE;
-                        last = 2;
+                        castles = castles or Constants.Companion.BLACK_SHORT_CASTLE
+                        last = 2
                     } else if (ch == 'q' && (!strict || last < 3)) {
-                        castles |= BLACK_LONG_CASTLE;
-                        last = 3;
+                        castles = castles or Constants.Companion.BLACK_LONG_CASTLE
+                        last = 3
                     } else {
-                        throw new IllegalArgumentException("Malformatted fen string: illegal castles identifier or sequence " + ch);
+                        throw IllegalArgumentException("Malformatted fen string: illegal castles identifier or sequence $ch")
                     }
-                    index++;
+                    index++
                 }
             }
-            board.castle =(castles & 1) == 1 ? 2 : 0;
-            board.castle += (castles & 2) == 2 ? 1 : 0;
-            board.castle += (castles & 4) == 4 ? 8 : 0;
-            board.castle += (castles & 8) == 8 ? 4 : 0;
-
+            board!!.castle = if ((castles and 1) == 1) 2 else 0
+            board!!.castle += if ((castles and 2) == 2) 1 else 0
+            board!!.castle += if ((castles and 4) == 4) 8 else 0
+            board!!.castle += if ((castles and 8) == 8) 4 else 0
         } else {
-            throw new IllegalArgumentException("Malformatted fen string: expected castles at index " + index);
+            throw IllegalArgumentException("Malformatted fen string: expected castles at index $index")
         }
         /*========== 4th field : ep square ==========*/
-        if (index + 1 < fen.length() && fen.charAt(index) == ' ') {
-            index++;
-            int sqiEP = NO_SQUARE;
-            if (fen.charAt(index) == '-') {
-                index++;
-            } else if (index + 2 < fen.length()) {
-                sqiEP = strToSqi(fen.substring(index, index + 2));
-                index += 2;
+        if (index + 1 < fen.length && fen[index] == ' ') {
+            index++
+            var sqiEP: Int = Constants.Companion.NO_SQUARE
+            if (fen[index] == '-') {
+                index++
+            } else if (index + 2 < fen.length) {
+                sqiEP = strToSqi(fen.substring(index, index + 2))
+                index += 2
             }
-            board.ep = sqiEP;
+            board!!.ep = sqiEP
         } else {
-            throw new IllegalArgumentException("Malformatted fen string: expected ep square at index " + index);
+            throw IllegalArgumentException("Malformatted fen string: expected ep square at index $index")
         }
         /*========== 5th field : half move clock ==========*/
-        if (index + 1 < fen.length() && fen.charAt(index) == ' ') {
-            index++;
-            int start = index;
-            while (index < fen.length() && fen.charAt(index) != ' ') {
-                index++;
+        if (index + 1 < fen.length && fen[index] == ' ') {
+            index++
+            val start = index
+            while (index < fen.length && fen[index] != ' ') {
+                index++
             }
-            board.halfMoveClock = Integer.parseInt(fen.substring(start, index));
+            board!!.halfMoveClock = fen.substring(start, index).toInt()
         } else {
-            throw new IllegalArgumentException("Malformatted fen string: expected half move clock at index " + index);
+            throw IllegalArgumentException("Malformatted fen string: expected half move clock at index $index")
         }
         /*========== 6th field : full move number ==========*/
-        if (index + 1 < fen.length() && fen.charAt(index) == ' ') {
-            int i = 2 * (Integer.parseInt(fen.substring(index + 1)) - 1);
-            if (board.side == LIGHT) {
-                setPlyNumber(i);
+        if (index + 1 < fen.length && fen[index] == ' ') {
+            val i = 2 * (fen.substring(index + 1).toInt() - 1)
+            if (board!!.side == Constants.Companion.LIGHT) {
+                setPlyNumber(i)
             } else {
-                setPlyNumber(i + 1);
+                setPlyNumber(i + 1)
             }
         } else {
-            throw new IllegalArgumentException("Malformatted fen string: expected ply number at index " + index);
+            throw IllegalArgumentException("Malformatted fen string: expected ply number at index $index")
         }
 
         /*========== now check the produced position ==========*/
         // @TODO 
     }
 
-    static void setPlyNumber(int plyNumber) {
-        board.plyNumber = plyNumber;
+    fun setPlyNumber(plyNumber: Int) {
+        board!!.plyNumber = plyNumber
     }
 
-    static void setToPlay(int side) {
-        board.side = side;
-        board.xside = board.side == LIGHT ? DARK : LIGHT;
+    fun setToPlay(side: Int) {
+        board!!.side = side
+        board!!.xside =
+            if (board!!.side == Constants.Companion.LIGHT) Constants.Companion.DARK else Constants.Companion.LIGHT
     }
 
     //    int PAWN = 0, KNIGHT = 1, BISHOP = 2, ROOK = 3, QUEEN = 4, KING = 5;
-//    int EMPTY = 6;
-    static void setStone(int j, int i, int stone) {
-        int _case = 56 - 8 * i + j;
-        board.piece[_case]
-                = abs(stone) == 0 ? 6
-                : abs(stone) == 6 ? 5
-                : abs(stone) == 5 ? 0 : abs(stone);
-        board.color[_case]
-                = stone < 0 ? LIGHT : stone > 0 ? DARK : EMPTY;
+    //    int EMPTY = 6;
+    fun setStone(j: Int, i: Int, stone: Int) {
+        val _case = 56 - 8 * i + j
+        board!!.piece[_case] =
+       if (abs(stone) == 0)
+            6
+        else
+            if (abs(stone) == 6)
+                5
+            else
+                if (abs(stone) == 5) 0 else abs(stone)
+        board!!.color[_case] =
+        if (stone < 0) Constants.Companion.LIGHT else if (stone > 0) Constants.Companion.DARK else Constants.Companion.EMPTY
 
 
-//        board.pieces[_case].code
+        //        board.pieces[_case].code
 //                = abs(stone) == 0 ? 6
 //                : abs(stone) == 6 ? 5
 //                : abs(stone) == 5 ? 0 : abs(stone);
@@ -174,58 +167,55 @@ public class FenToBoard implements Constants {
 //                = stone < 0 ? LIGHT : stone > 0 ? DARK : EMPTY;
     }
 
-    static int abs(int x) {
-        return x < 0 ? -x : x;
+    fun abs(x: Int): Int {
+        return if (x < 0) -x else x
     }
 
-    public static int fenCharToStone(char ch) {
-        for (int stone = MIN_STONE; stone <= MAX_STONE; stone++) {
-            if (fenChars[stone - MIN_STONE] == ch) {
-                return stone;
+    fun fenCharToStone(ch: Char): Int {
+        for (stone in Constants.MIN_STONE..Constants.MAX_STONE) {
+            if (Constants.fenChars.get(stone - Constants.Companion.MIN_STONE) == ch) {
+                return stone
             }
         }
-        return NO_STONE;
+        return Constants.Companion.NO_STONE.toInt()
     }
 
-    public static int strToSqi(String s) {
-        if (s == null || s.length() != 2) {
-            return NO_SQUARE;
+    fun strToSqi(s: String?): Int {
+        if (s == null || s.length != 2) {
+            return Constants.Companion.NO_SQUARE
         }
-        int col = charToCol(s.charAt(0));
-        if (col == NO_COL) {
-            return NO_SQUARE;
+        val col = charToCol(s[0])
+        if (col == Constants.Companion.NO_COL) {
+            return Constants.Companion.NO_SQUARE
         }
-        int row = charToRow(s.charAt(1));
-        if (row == NO_ROW) {
-            return NO_SQUARE;
+        val row = charToRow(s[1])
+        if (row == Constants.Companion.NO_ROW) {
+            return Constants.Companion.NO_SQUARE
         }
-        return row * 8 + col;
-
+        return row * 8 + col
     }
 
-    public static int charToCol(char ch) {
-        if ((ch >= 'a') && (ch <= 'h')) {
-            return ch - 'a';
+    fun charToCol(ch: Char): Int {
+        return if ((ch >= 'a') && (ch <= 'h')) {
+            ch.code - 'a'.code
         } else {
-            return NO_COL;
+            Constants.NO_COL
         }
     }
 
-    public static int charToRow(char ch) {
-        if ((ch >= '1') && (ch <= '8')) {
-            return ch - '1';
+    fun charToRow(ch: Char): Int {
+        return if ((ch >= '1') && (ch <= '8')) {
+            ch.code - '1'.code
         } else {
-            return NO_ROW;
+        Constants.NO_ROW
         }
     }
 
-    public static char stoneToFenChar(int stone) {
-        if (stone >= MIN_STONE && stone <= MAX_STONE) {
-            return fenChars[stone - MIN_STONE];
+    fun stoneToFenChar(stone: Int): Char {
+        return if (stone >= Constants.Companion.MIN_STONE && stone <= Constants.Companion.MAX_STONE) {
+          Constants.Companion.fenChars.get(stone - Constants.Companion.MIN_STONE)
         } else {
-            return '?';
+            '?'
         }
-    }
-
-    //    public static String getFEN(PositionB pos) {}
+    } //    public static String getFEN(PositionB pos) {}
 }
