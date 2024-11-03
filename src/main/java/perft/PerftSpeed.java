@@ -26,7 +26,8 @@ public class PerftSpeed {
     private static void perftTest() {
         String[] resexpected = new String[]{"0", "20", "400", "8902", "197281", "4865609", "119060324"};
         //voir https://www.chessprogramming.org/Perft_Results
-        String f = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+       String f = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+
         Board board = FenToBoard.toBoard(f);
         int max_depth = 6;
         double t0 = System.nanoTime();
