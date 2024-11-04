@@ -4,6 +4,7 @@ import board.Constants.Companion.A1
 import board.Constants.Companion.A8
 import board.Constants.Companion.B1
 import board.Constants.Companion.B8
+import board.Constants.Companion.BOARD_SIZE
 import board.Constants.Companion.C1
 import board.Constants.Companion.C8
 import board.Constants.Companion.D1
@@ -167,16 +168,6 @@ class Board : Constants {
             }
         }
 
-
-//        if (ep != -1) {
-//            if (side == LIGHT) {
-//                if ((ep and 7) != 0 && color[ep + 7] == LIGHT && piece[ep + 7] == PAWN) genPush(ep + 7, ep, 21)
-//                if ((ep and 7) != 7 && (color[ep + 9] == LIGHT && piece[ep + 9] == PAWN)) genPush(ep + 9, ep, 21)
-//            } else {
-//                if ((ep and 7) != 0 && (color[ep - 9] == DARK && piece[ep - 9] == PAWN)) genPush(ep - 9, ep, 21)
-//                if ((ep and 7) != 7 && (color[ep - 7] == DARK && piece[ep - 7] == PAWN)) genPush(ep - 7, ep, 21)
-//            }
-//        }
     }
 
      fun genCastles() {
@@ -186,14 +177,6 @@ class Board : Constants {
          if ((castle and (if (side == LIGHT) 1 else 4)) != 0) genPush(kingStart, kingsideTarget, 2)
          if ((castle and (if (side == LIGHT) 2 else 8)) != 0) genPush(kingStart, towersideTarget, 2)
 
-
-//        if (side == LIGHT) {
-//            if ((castle and 1) != 0) genPush(E1, G1, 2)
-//            if ((castle and 2) != 0) genPush(E1, C1, 2)
-//        } else {
-//            if ((castle and 4) != 0) genPush(E8, G8, 2)
-//            if ((castle and 8) != 0) genPush(E8, C8, 2)
-//        }
     }
 
      fun gen(c: Int) {
@@ -225,7 +208,7 @@ class Board : Constants {
     }
 
 
-    private fun genPromote(from: Int, to: Int, bits: Int) {
+     fun genPromote(from: Int, to: Int, bits: Int) {
         for (i in KNIGHT..QUEEN) pseudomoves.add(
             Move(
                 from.toByte(),
@@ -334,22 +317,31 @@ class Board : Constants {
 
         return true
     }
-
+     fun getRookMovePositions(mTo: Byte): Pair<Int, Int> {
+        return when (mTo) {
+            62.toByte() -> F1 to H1
+            58.toByte() -> D1 to A1
+            6.toByte() -> F8 to H8
+            2.toByte() -> D8 to A8
+            else -> -1 to -1
+        }
+    }
     fun takeback() {
+        // Inverser les valeurs de 'side' et 'xside'
         side = side xor 1
         xside = xside xor 1
 
+// Extraire les données de mouvement
         val m = um.mov
         castle = um.castle
         ep = um.ep
         fifty = um.fifty
 
+// Mettre à jour la position de départ
         color[m.from.toInt()] = side
-        if ((m.bits.toInt() and 32) != 0) {
-            piece[m.from.toInt()] = PAWN
-        } else {
-            piece[m.from.toInt()] = piece[m.to.toInt()]
-        }
+        piece[m.from.toInt()] = if ((m.bits.toInt() and 32) != 0) PAWN else piece[m.to.toInt()]
+
+// Mettre à jour la position de destination en fonction de la capture
         if (um.capture == EMPTY) {
             color[m.to.toInt()] = EMPTY
             piece[m.to.toInt()] = EMPTY
@@ -357,41 +349,21 @@ class Board : Constants {
             color[m.to.toInt()] = xside
             piece[m.to.toInt()] = um.capture
         }
-        if ((m.bits.toInt() and 2) != 0) {
-            val from: Int
-            val to: Int
 
-            when (m.to) {
-                62.toByte() -> {
-                    from = F1
-                    to = H1
-                }
+        when {
+            (m.bits.toInt() and 2) != 0 -> {
+                val (from, to) = getRookMovePositions(m.to)
 
-                58.toByte() -> {
-                    from = D1
-                    to = A1
-                }
-
-                6.toByte() -> {
-                    from = F8
-                    to = H8
-                }
-
-                2.toByte() -> {
-                    from = D8
-                    to = A8
-                }
-
-                else -> {
-                    from = -1
-                    to = -1
+                if (from != -1 && to != -1) {
+                    color[to] = side
+                    piece[to] = ROOK
+                    color[from] = EMPTY
+                    piece[from] = EMPTY
                 }
             }
-            color[to] = side
-            piece[to] = ROOK
-            color[from] = EMPTY
-            piece[from] = EMPTY
         }
+
+
         if ((m.bits.toInt() and 4) != 0) {
             if (side == LIGHT) {
                 color[m.to + 8] = xside
@@ -403,11 +375,8 @@ class Board : Constants {
         }
     }
 
-    companion object {
-        const val BOARD_SIZE: Int = 64
-    }
 
-    private fun inCheck(board: Board, s: Int): Boolean {
+     fun inCheck(board: Board, s: Int): Boolean {
         return range(0, BOARD_SIZE)
             .filter { i: Int -> board.piece[i] == KING && board.color[i] == s }
             .anyMatch { i: Int -> board.isAttacked(i, s xor 1) }

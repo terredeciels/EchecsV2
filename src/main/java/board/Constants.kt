@@ -1,10 +1,11 @@
 package board
 
 
-public interface Constants {
+ interface Constants {
 
 
     companion object {
+        const val BOARD_SIZE: Int = 64
         val fenChars: CharArray = charArrayOf('K', 'P', 'Q', 'R', 'B', 'N', '-', 'n', 'b', 'r', 'q', 'p', 'k')
         const val NO_CASTLES: Int = 0
         const val WHITE_LONG_CASTLE: Int = 1
