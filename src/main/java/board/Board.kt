@@ -144,16 +144,34 @@ class Board : Constants {
         val offset = if (side == LIGHT) -8 else 8
         val oppositeColor = side xor 1
 
-        if ((c and 7) != 0 && color[c + offset - 1] == oppositeColor) genPush(c, c + offset - 1, 17)
-        if ((c and 7) != 7 && color[c + offset + 1] == oppositeColor) genPush(c, c + offset + 1, 17)
+        // Génération des captures possibles du pion
+        generatePawnCaptures(c, offset, oppositeColor)
 
+        // Génération du mouvement simple du pion vers l'avant
         if (color[c + offset] == EMPTY) {
             genPush(c, c + offset, 16)
-            if (side == LIGHT && c >= 48 || (side == DARK && c <= 15)) if (color[c + (offset shl 1)] == EMPTY) genPush(
-                c, c + (offset shl 1), 24
-            )
+            // Génération du double mouvement initial du pion
+            if (isPawnStartingRank(c)) {
+                if (color[c + (offset shl 1)] == EMPTY) {
+                    genPush(c, c + (offset shl 1), 24)
+                }
+            }
         }
     }
+
+    fun generatePawnCaptures(c: Int, offset: Int, oppositeColor: Int) {
+        val leftCapture = c + offset - 1
+        val rightCapture = c + offset + 1
+
+        if (c and 7 != 0 && color[leftCapture] == oppositeColor) genPush(c, leftCapture, 17)
+        if (c and 7 != 7 && color[rightCapture] == oppositeColor) genPush(c, rightCapture, 17)
+    }
+
+
+    fun isPawnStartingRank(c: Int): Boolean {
+        return side == LIGHT && c in 48..55 || side == DARK && c in 8..15
+    }
+
 
     fun genEnpassant() {
         when {
@@ -170,16 +188,20 @@ class Board : Constants {
 
     }
 
-     fun genCastles() {
+    fun genCastles() {
 
-         val (kingStart, kingsideTarget, towersideTarget) = (if (side == LIGHT) Triple(E1, G1, C1) else Triple(E8, G8, C8))
+        val (kingStart, kingsideTarget, towersideTarget) = (if (side == LIGHT) Triple(E1, G1, C1) else Triple(
+            E8,
+            G8,
+            C8
+        ))
 
-         if ((castle and (if (side == LIGHT) 1 else 4)) != 0) genPush(kingStart, kingsideTarget, 2)
-         if ((castle and (if (side == LIGHT) 2 else 8)) != 0) genPush(kingStart, towersideTarget, 2)
+        if ((castle and (if (side == LIGHT) 1 else 4)) != 0) genPush(kingStart, kingsideTarget, 2)
+        if ((castle and (if (side == LIGHT) 2 else 8)) != 0) genPush(kingStart, towersideTarget, 2)
 
     }
 
-     fun gen(c: Int) {
+    fun gen(c: Int) {
 
         val p = piece[c]
 
@@ -199,7 +221,7 @@ class Board : Constants {
     }
 
 
-     fun genPush(from: Int, to: Int, bits: Int) {
+    fun genPush(from: Int, to: Int, bits: Int) {
         if ((bits and 16) != 0 && (if (side == LIGHT) to <= H8 else to >= A1)) {
             genPromote(from, to, bits)
             return
@@ -208,7 +230,7 @@ class Board : Constants {
     }
 
 
-     fun genPromote(from: Int, to: Int, bits: Int) {
+    fun genPromote(from: Int, to: Int, bits: Int) {
         for (i in KNIGHT..QUEEN) pseudomoves.add(
             Move(
                 from.toByte(),
@@ -317,7 +339,8 @@ class Board : Constants {
 
         return true
     }
-     fun getRookMovePositions(mTo: Byte): Pair<Int, Int> {
+
+    fun getRookMovePositions(mTo: Byte): Pair<Int, Int> {
         return when (mTo) {
             62.toByte() -> F1 to H1
             58.toByte() -> D1 to A1
@@ -326,6 +349,7 @@ class Board : Constants {
             else -> -1 to -1
         }
     }
+
     fun takeback() {
         // Inverser les valeurs de 'side' et 'xside'
         side = side xor 1
@@ -339,15 +363,22 @@ class Board : Constants {
 
 // Mettre à jour la position de départ
         color[m.from.toInt()] = side
-        piece[m.from.toInt()] = if ((m.bits.toInt() and 32) != 0) PAWN else piece[m.to.toInt()]
+        piece[m.from.toInt()] = when {
+            (m.bits.toInt() and 32) != 0 -> PAWN
+            else -> piece[m.to.toInt()]
+        }
 
 // Mettre à jour la position de destination en fonction de la capture
-        if (um.capture == EMPTY) {
-            color[m.to.toInt()] = EMPTY
-            piece[m.to.toInt()] = EMPTY
-        } else {
-            color[m.to.toInt()] = xside
-            piece[m.to.toInt()] = um.capture
+        when (um.capture) {
+            EMPTY -> {
+                color[m.to.toInt()] = EMPTY
+                piece[m.to.toInt()] = EMPTY
+            }
+
+            else -> {
+                color[m.to.toInt()] = xside
+                piece[m.to.toInt()] = um.capture
+            }
         }
 
         when {
@@ -376,7 +407,7 @@ class Board : Constants {
     }
 
 
-     fun inCheck(board: Board, s: Int): Boolean {
+    fun inCheck(board: Board, s: Int): Boolean {
         return range(0, BOARD_SIZE)
             .filter { i: Int -> board.piece[i] == KING && board.color[i] == s }
             .anyMatch { i: Int -> board.isAttacked(i, s xor 1) }
