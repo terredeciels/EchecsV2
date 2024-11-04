@@ -1,7 +1,7 @@
 package board
 
 
-interface Constants {
+public interface Constants {
 
 
     companion object {

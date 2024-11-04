@@ -180,16 +180,24 @@ class Board : Constants {
     }
 
      fun genCastles() {
-        if (side == LIGHT) {
-            if ((castle and 1) != 0) genPush(E1, G1, 2)
-            if ((castle and 2) != 0) genPush(E1, C1, 2)
-        } else {
-            if ((castle and 4) != 0) genPush(E8, G8, 2)
-            if ((castle and 8) != 0) genPush(E8, C8, 2)
-        }
+
+         val (kingStart, kingsideTarget, towersideTarget) = (if (side == LIGHT) Triple(E1, G1, C1) else Triple(E8, G8, C8))
+
+         if ((castle and (if (side == LIGHT) 1 else 4)) != 0) genPush(kingStart, kingsideTarget, 2)
+         if ((castle and (if (side == LIGHT) 2 else 8)) != 0) genPush(kingStart, towersideTarget, 2)
+
+
+//        if (side == LIGHT) {
+//            if ((castle and 1) != 0) genPush(E1, G1, 2)
+//            if ((castle and 2) != 0) genPush(E1, C1, 2)
+//        } else {
+//            if ((castle and 4) != 0) genPush(E8, G8, 2)
+//            if ((castle and 8) != 0) genPush(E8, C8, 2)
+//        }
     }
 
      fun gen(c: Int) {
+
         val p = piece[c]
 
         for (d in 0 until offsets[p]) {
@@ -208,7 +216,7 @@ class Board : Constants {
     }
 
 
-    private fun genPush(from: Int, to: Int, bits: Int) {
+     fun genPush(from: Int, to: Int, bits: Int) {
         if ((bits and 16) != 0 && (if (side == LIGHT) to <= H8 else to >= A1)) {
             genPromote(from, to, bits)
             return
