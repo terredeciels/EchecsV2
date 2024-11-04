@@ -5,17 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1ac4d742-3573-4be4-a80a-8b611187df5f" name="Changes" comment="Kotlin">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/board/Board.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/board/Board.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/board/Constants.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/board/Constants.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/board/Move.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/board/Piece.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/board/UndoMove.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/perft/FenToBoard.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/perft/FenToBoard.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/perft/PerftCompare.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/perft/PerftCompare.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -129,27 +120,14 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="JetRunConfigurationType">
-      <module name="ChessMovesGenerator" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
-      <module name="ChessMovesGenerator" />
-      <option name="filePath" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <list>
       <item itemvalue="Application.PerftCompare" />
       <item itemvalue="Application.PerftSpeed" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.PerftSpeed" />
         <item itemvalue="Application.PerftCompare" />
+        <item itemvalue="Application.PerftSpeed" />
       </list>
     </recent_temporary>
   </component>
@@ -318,7 +296,15 @@
       <option name="project" value="LOCAL" />
       <updated>1730638362331</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="Kotlin">
+      <option name="closed" value="true" />
+      <created>1730641054713</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1730641054713</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

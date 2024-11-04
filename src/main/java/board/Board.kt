@@ -1,8 +1,40 @@
 package board
 
-import java.util.stream.IntStream
+import board.Constants.Companion.A1
+import board.Constants.Companion.A8
+import board.Constants.Companion.B1
+import board.Constants.Companion.B8
+import board.Constants.Companion.C1
+import board.Constants.Companion.C8
+import board.Constants.Companion.D1
+import board.Constants.Companion.D8
+import board.Constants.Companion.DARK
+import board.Constants.Companion.E1
+import board.Constants.Companion.E8
+import board.Constants.Companion.EMPTY
+import board.Constants.Companion.F1
+import board.Constants.Companion.F8
+import board.Constants.Companion.G1
+import board.Constants.Companion.G8
+import board.Constants.Companion.H1
+import board.Constants.Companion.H8
+import board.Constants.Companion.KING
+import board.Constants.Companion.KNIGHT
+import board.Constants.Companion.LIGHT
+import board.Constants.Companion.PAWN
+import board.Constants.Companion.QUEEN
+import board.Constants.Companion.ROOK
+import board.Constants.Companion.castle_mask
+import board.Constants.Companion.mailbox
+import board.Constants.Companion.mailbox64
+import board.Constants.Companion.offset
+import board.Constants.Companion.offsets
+import board.Constants.Companion.slide
+import java.lang.System.arraycopy
+import java.util.stream.IntStream.range
 
 class Piece
+
 /**
  * 1	capture 2	castle 4	en passant capture 8	pushing a pawn 2 squares 16	pawn
  * move 32	promote
@@ -15,50 +47,34 @@ class Move {
 
     internal constructor()
 
-    internal constructor(from: Byte, to: Byte, promote: Byte, bits: Byte) {
-        this.from = from
-        this.to = to
-        this.promote = promote
-        this.bits = bits
+    internal constructor(f: Byte, t: Byte, p: Byte, b: Byte) {
+        from = f
+        to = t
+        promote = p
+        bits = b
     }
 }
 
-internal class UndoMove {
+class UndoMove {
     var mov: Move = Move()
     var capture: Int = 0
     var castle: Int = 0
     var ep: Int = 0
     var fifty: Int = 0 //public int hash;
 }
+
 class Board : Constants {
-    @JvmField
-    var color: IntArray = IntArray(BOARD_SIZE)
 
-    @JvmField
-    var piece: IntArray = IntArray(BOARD_SIZE)
-
-    private var pieces = arrayOfNulls<Piece>(BOARD_SIZE)
-
-    @JvmField
-    var side: Int = 0
-
-    @JvmField
-    var xside: Int = 0
-
-    @JvmField
-    var castle: Int = 0
-
-    @JvmField
-    var ep: Int = 0
-
-    @JvmField
+    var color = IntArray(BOARD_SIZE)
+    var piece = IntArray(BOARD_SIZE)
+    var pieces = arrayOfNulls<Piece>(BOARD_SIZE)
+    var side = 0
+    var xside = 0
+    var castle = 0
+    var ep = 0
     var pseudomoves: MutableList<Move> = ArrayList()
-
-    @JvmField
-    var halfMoveClock: Int = 0
-
-    @JvmField
-    var plyNumber: Int = 0
+    var halfMoveClock = 0
+    var plyNumber = 0
     private var fifty = 0
     private var um = UndoMove()
 
@@ -68,8 +84,8 @@ class Board : Constants {
     }
 
     constructor(board: Board) {
-        System.arraycopy(board.color, 0, color, 0, BOARD_SIZE)
-        System.arraycopy(board.piece, 0, piece, 0, BOARD_SIZE)
+        arraycopy(board.color, 0, color, 0, BOARD_SIZE)
+        arraycopy(board.piece, 0, piece, 0, BOARD_SIZE)
         side = board.side
         xside = board.xside
         castle = board.castle
@@ -79,140 +95,121 @@ class Board : Constants {
         um = UndoMove()
     }
 
-    private fun initPieces() {
-        for (c in 0 until BOARD_SIZE) {
-            pieces[c] = Piece()
-        }
+    fun initPieces() {
+        (0 until BOARD_SIZE).forEach { c -> pieces[c] = Piece() }
     }
 
-    private fun isAttacked(sqTarget: Int, side: Int): Boolean {
-        return IntStream.range(0, BOARD_SIZE)
+    fun isAttacked(sqTarget: Int, side: Int): Boolean {
+        return range(0, BOARD_SIZE)
             .filter { sq: Int -> color[sq] == side }
             .anyMatch { sq: Int -> isAttackedByPiece(sq, sqTarget, piece[sq], side) }
     }
 
-    private fun isAttackedByPiece(sq: Int, sqTarget: Int, pieceType: Int, side: Int): Boolean {
+    fun isAttackedByPiece(sq: Int, sqTarget: Int, pieceType: Int, side: Int): Boolean {
         return when (pieceType) {
-            Constants.PAWN -> isPawnAttacked(sq, sqTarget, side)
-            else -> IntStream.range(0, Constants.offsets[pieceType])
+            PAWN -> isPawnAttacked(sq, sqTarget, side)
+            else -> range(0, offsets[pieceType])
                 .anyMatch { isAttackedByOffset(sq, sqTarget, pieceType, it) }
         }
     }
 
-    private fun isPawnAttacked(sq: Int, sqTarget: Int, side: Int): Boolean {
-        val offset = if (side == Constants.LIGHT) -8 else 8
+    fun isPawnAttacked(sq: Int, sqTarget: Int, side: Int): Boolean {
+        val offset = if (side == LIGHT) -8 else 8
         return (sq and 7) != 0 && sq + offset - 1 == sqTarget ||
                 (sq and 7) != 7 && sq + offset + 1 == sqTarget
     }
 
-    private fun isAttackedByOffset(sq: Int, sqTarget: Int, pieceType: Int, offsetIndex: Int): Boolean {
+    fun isAttackedByOffset(sq: Int, sqTarget: Int, pieceType: Int, offsetIndex: Int): Boolean {
         var sqIndex = sq
-        while ((Constants.mailbox[Constants.mailbox64[sqIndex] + Constants.offset[pieceType][offsetIndex]].also {
-                sqIndex = it
-            }) != -1) {
+        while (mailbox[mailbox64[sqIndex] + offset[pieceType][offsetIndex]].also { sqIndex = it } != -1) {
             if (sqIndex == sqTarget) return true
-            if (color[sqIndex] != Constants.EMPTY || !Constants.slide[pieceType]) break
+            if (color[sqIndex] != EMPTY || !slide[pieceType]) break
         }
         return false
     }
 
-
-    /**
-     * Generates all moves for the current board position.
-     *
-     *
-     * This function iterates over all pieces on the board, and for each piece,
-     * it either calls [.gen_pawn] if the piece is a pawn, or
-     * [.gen] otherwise.  Then, it calls
-     * [.gen_castles] and [.gen_enpassant].
-     */
     fun gen() {
-        IntStream.range(0, BOARD_SIZE)
+        range(0, BOARD_SIZE)
             .filter { c: Int -> color[c] == side }
             .forEach { c: Int ->
-                if (piece[c] == Constants.PAWN) genPawn(c)
+                if (piece[c] == PAWN) genPawn(c)
                 else gen(c)
             }
         genCastles()
         genEnpassant()
     }
 
-    private fun genPawn(c: Int) {
-        val offset = if ((side == Constants.LIGHT)) -8 else 8
+    fun genPawn(c: Int) {
+        val offset = if (side == LIGHT) -8 else 8
         val oppositeColor = side xor 1
 
         if ((c and 7) != 0 && color[c + offset - 1] == oppositeColor) genPush(c, c + offset - 1, 17)
         if ((c and 7) != 7 && color[c + offset + 1] == oppositeColor) genPush(c, c + offset + 1, 17)
 
-        if (color[c + offset] == Constants.EMPTY) {
+        if (color[c + offset] == EMPTY) {
             genPush(c, c + offset, 16)
-            if ((side == Constants.LIGHT && c >= 48) || (side == Constants.DARK && c <= 15)) if (color[c + (offset shl 1)] == Constants.EMPTY) genPush(
-                c,
-                c + (offset shl 1),
-                24
+            if (side == LIGHT && c >= 48 || (side == DARK && c <= 15)) if (color[c + (offset shl 1)] == EMPTY) genPush(
+                c, c + (offset shl 1), 24
             )
         }
     }
 
-    private fun genEnpassant() {
-        if (ep != -1) {
-            if (side == Constants.LIGHT) {
-                if ((ep and 7) != 0 && color[ep + 7] == Constants.LIGHT && piece[ep + 7] == Constants.PAWN) genPush(
-                    ep + 7,
-                    ep,
-                    21
-                )
-                if ((ep and 7) != 7 && (color[ep + 9] == Constants.LIGHT && piece[ep + 9] == Constants.PAWN)) genPush(
-                    ep + 9,
-                    ep,
-                    21
-                )
-            } else {
-                if ((ep and 7) != 0 && (color[ep - 9] == Constants.DARK && piece[ep - 9] == Constants.PAWN)) genPush(
-                    ep - 9,
-                    ep,
-                    21
-                )
-                if ((ep and 7) != 7 && (color[ep - 7] == Constants.DARK && piece[ep - 7] == Constants.PAWN)) genPush(
-                    ep - 7,
-                    ep,
-                    21
-                )
+    fun genEnpassant() {
+        when {
+            ep != -1 -> {
+                val offsets = if (side == LIGHT) listOf(7, 9) else listOf(-9, -7)
+                val targetColor = if (side == LIGHT) LIGHT else DARK
+                offsets.forEach { offset ->
+                    val newEp = ep + offset
+                    if (ep and 7 != (if (offset == offsets[0]) 0 else 7))
+                        if (color[newEp] == targetColor && piece[newEp] == PAWN) genPush(newEp, ep, 21)
+                }
             }
         }
+
+
+//        if (ep != -1) {
+//            if (side == LIGHT) {
+//                if ((ep and 7) != 0 && color[ep + 7] == LIGHT && piece[ep + 7] == PAWN) genPush(ep + 7, ep, 21)
+//                if ((ep and 7) != 7 && (color[ep + 9] == LIGHT && piece[ep + 9] == PAWN)) genPush(ep + 9, ep, 21)
+//            } else {
+//                if ((ep and 7) != 0 && (color[ep - 9] == DARK && piece[ep - 9] == PAWN)) genPush(ep - 9, ep, 21)
+//                if ((ep and 7) != 7 && (color[ep - 7] == DARK && piece[ep - 7] == PAWN)) genPush(ep - 7, ep, 21)
+//            }
+//        }
     }
 
-    private fun genCastles() {
-        if (side == Constants.LIGHT) {
-            if ((castle and 1) != 0) genPush(Constants.E1, Constants.G1, 2)
-            if ((castle and 2) != 0) genPush(Constants.E1, Constants.C1, 2)
+     fun genCastles() {
+        if (side == LIGHT) {
+            if ((castle and 1) != 0) genPush(E1, G1, 2)
+            if ((castle and 2) != 0) genPush(E1, C1, 2)
         } else {
-            if ((castle and 4) != 0) genPush(Constants.E8, Constants.G8, 2)
-            if ((castle and 8) != 0) genPush(Constants.E8, Constants.C8, 2)
+            if ((castle and 4) != 0) genPush(E8, G8, 2)
+            if ((castle and 8) != 0) genPush(E8, C8, 2)
         }
     }
 
-    private fun gen(c: Int) {
+     fun gen(c: Int) {
         val p = piece[c]
 
-        for (d in 0 until Constants.offsets[p]) {
+        for (d in 0 until offsets[p]) {
             var to = c
             while (true) {
-                to = Constants.mailbox[Constants.mailbox64[to] + Constants.offset[p][d]]
+                to = mailbox[mailbox64[to] + offset[p][d]]
                 if (to == -1) break
-                if (color[to] != Constants.EMPTY) {
+                if (color[to] != EMPTY) {
                     if (color[to] == xside) genPush(c, to, 1)
                     break
                 }
                 genPush(c, to, 0)
-                if (!Constants.slide[p]) break
+                if (!slide[p]) break
             }
         }
     }
 
 
     private fun genPush(from: Int, to: Int, bits: Int) {
-        if ((bits and 16) != 0 && (if (side == Constants.LIGHT) to <= Constants.H8 else to >= Constants.A1)) {
+        if ((bits and 16) != 0 && (if (side == LIGHT) to <= H8 else to >= A1)) {
             genPromote(from, to, bits)
             return
         }
@@ -221,7 +218,7 @@ class Board : Constants {
 
 
     private fun genPromote(from: Int, to: Int, bits: Int) {
-        for (i in Constants.KNIGHT..Constants.QUEEN) pseudomoves.add(
+        for (i in KNIGHT..QUEEN) pseudomoves.add(
             Move(
                 from.toByte(),
                 to.toByte(),
@@ -239,47 +236,47 @@ class Board : Constants {
             if (inCheck(this, side)) return false
             when (m.to) {
                 62.toByte() -> {
-                    if (color[Constants.F1] != Constants.EMPTY || color[Constants.G1] != Constants.EMPTY || isAttacked(
-                            Constants.F1, xside
-                        ) || isAttacked(Constants.G1, xside)
+                    if (color[F1] != EMPTY || color[G1] != EMPTY || isAttacked(
+                            F1, xside
+                        ) || isAttacked(G1, xside)
                     ) {
                         return false
                     }
-                    from = Constants.H1
-                    to = Constants.F1
+                    from = H1
+                    to = F1
                 }
 
                 58.toByte() -> {
-                    if (color[Constants.B1] != Constants.EMPTY || color[Constants.C1] != Constants.EMPTY || color[Constants.D1] != Constants.EMPTY || isAttacked(
-                            Constants.C1, xside
-                        ) || isAttacked(Constants.D1, xside)
+                    if (color[B1] != EMPTY || color[C1] != EMPTY || color[D1] != EMPTY || isAttacked(
+                            C1, xside
+                        ) || isAttacked(D1, xside)
                     ) {
                         return false
                     }
-                    from = Constants.A1
-                    to = Constants.D1
+                    from = A1
+                    to = D1
                 }
 
                 6.toByte() -> {
-                    if (color[Constants.F8] != Constants.EMPTY || color[Constants.G8] != Constants.EMPTY || isAttacked(
-                            Constants.F8, xside
-                        ) || isAttacked(Constants.G8, xside)
+                    if (color[F8] != EMPTY || color[G8] != EMPTY || isAttacked(
+                            F8, xside
+                        ) || isAttacked(G8, xside)
                     ) {
                         return false
                     }
-                    from = Constants.H8
-                    to = Constants.F8
+                    from = H8
+                    to = F8
                 }
 
                 2.toByte() -> {
-                    if (color[Constants.B8] != Constants.EMPTY || color[Constants.C8] != Constants.EMPTY || color[Constants.D8] != Constants.EMPTY || isAttacked(
-                            Constants.C8, xside
-                        ) || isAttacked(Constants.D8, xside)
+                    if (color[B8] != EMPTY || color[C8] != EMPTY || color[D8] != EMPTY || isAttacked(
+                            C8, xside
+                        ) || isAttacked(D8, xside)
                     ) {
                         return false
                     }
-                    from = Constants.A8
-                    to = Constants.D8
+                    from = A8
+                    to = D8
                 }
 
                 else -> {
@@ -289,8 +286,8 @@ class Board : Constants {
             }
             color[to] = color[from]
             piece[to] = piece[from]
-            color[from] = Constants.EMPTY
-            piece[from] = Constants.EMPTY
+            color[from] = EMPTY
+            piece[from] = EMPTY
         }
 
         /* back up information, so we can take the move back later. */
@@ -300,9 +297,9 @@ class Board : Constants {
         um.ep = ep
         um.fifty = fifty
 
-        castle = castle and (Constants.castle_mask[m.from.toInt()] and Constants.castle_mask[m.to.toInt()])
+        castle = castle and (castle_mask[m.from.toInt()] and castle_mask[m.to.toInt()])
 
-        ep = if ((m.bits.toInt() and 8) != 0) if (side == Constants.LIGHT) m.to + 8 else m.to - 8
+        ep = if ((m.bits.toInt() and 8) != 0) if (side == LIGHT) m.to + 8 else m.to - 8
         else -1
 
         fifty = if ((m.bits.toInt() and 17) != 0) 0 else fifty + 1
@@ -310,13 +307,13 @@ class Board : Constants {
         /* move the piece */
         color[m.to.toInt()] = side
         piece[m.to.toInt()] = if ((m.bits.toInt() and 32) != 0) m.promote.toInt() else piece[m.from.toInt()]
-        color[m.from.toInt()] = Constants.EMPTY
-        piece[m.from.toInt()] = Constants.EMPTY
+        color[m.from.toInt()] = EMPTY
+        piece[m.from.toInt()] = EMPTY
 
         /* erase the pawn if this is an en passant move */
         if ((m.bits.toInt() and 4) != 0) {
-            val offset = if ((side == Constants.LIGHT)) 8 else -8
-            piece[m.to + offset] = Constants.EMPTY
+            val offset = if ((side == LIGHT)) 8 else -8
+            piece[m.to + offset] = EMPTY
             color[m.to + offset] = piece[m.to + offset]
         }
 
@@ -341,13 +338,13 @@ class Board : Constants {
 
         color[m.from.toInt()] = side
         if ((m.bits.toInt() and 32) != 0) {
-            piece[m.from.toInt()] = Constants.PAWN
+            piece[m.from.toInt()] = PAWN
         } else {
             piece[m.from.toInt()] = piece[m.to.toInt()]
         }
-        if (um.capture == Constants.EMPTY) {
-            color[m.to.toInt()] = Constants.EMPTY
-            piece[m.to.toInt()] = Constants.EMPTY
+        if (um.capture == EMPTY) {
+            color[m.to.toInt()] = EMPTY
+            piece[m.to.toInt()] = EMPTY
         } else {
             color[m.to.toInt()] = xside
             piece[m.to.toInt()] = um.capture
@@ -358,23 +355,23 @@ class Board : Constants {
 
             when (m.to) {
                 62.toByte() -> {
-                    from = Constants.F1
-                    to = Constants.H1
+                    from = F1
+                    to = H1
                 }
 
                 58.toByte() -> {
-                    from = Constants.D1
-                    to = Constants.A1
+                    from = D1
+                    to = A1
                 }
 
                 6.toByte() -> {
-                    from = Constants.F8
-                    to = Constants.H8
+                    from = F8
+                    to = H8
                 }
 
                 2.toByte() -> {
-                    from = Constants.D8
-                    to = Constants.A8
+                    from = D8
+                    to = A8
                 }
 
                 else -> {
@@ -383,17 +380,17 @@ class Board : Constants {
                 }
             }
             color[to] = side
-            piece[to] = Constants.ROOK
-            color[from] = Constants.EMPTY
-            piece[from] = Constants.EMPTY
+            piece[to] = ROOK
+            color[from] = EMPTY
+            piece[from] = EMPTY
         }
         if ((m.bits.toInt() and 4) != 0) {
-            if (side == Constants.LIGHT) {
+            if (side == LIGHT) {
                 color[m.to + 8] = xside
-                piece[m.to + 8] = Constants.PAWN
+                piece[m.to + 8] = PAWN
             } else {
                 color[m.to - 8] = xside
-                piece[m.to - 8] = Constants.PAWN
+                piece[m.to - 8] = PAWN
             }
         }
     }
@@ -403,8 +400,8 @@ class Board : Constants {
     }
 
     private fun inCheck(board: Board, s: Int): Boolean {
-        return IntStream.range(0, BOARD_SIZE)
-            .filter { i: Int -> board.piece[i] == Constants.KING && board.color[i] == s }
+        return range(0, BOARD_SIZE)
+            .filter { i: Int -> board.piece[i] == KING && board.color[i] == s }
             .anyMatch { i: Int -> board.isAttacked(i, s xor 1) }
     }
 }
