@@ -7,7 +7,6 @@
     <list default="true" id="1ac4d742-3573-4be4-a80a-8b611187df5f" name="Changes" comment="Kotlin">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/board/Board.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/board/Board.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/board/Constants.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/board/Constants.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

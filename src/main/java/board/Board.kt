@@ -148,12 +148,13 @@ class Board : Constants {
         generatePawnCaptures(c, offset, oppositeColor)
 
         // Génération du mouvement simple du pion vers l'avant
-        if (color[c + offset] == EMPTY) {
-            genPush(c, c + offset, 16)
-            // Génération du double mouvement initial du pion
-            if (isPawnStartingRank(c)) {
-                if (color[c + (offset shl 1)] == EMPTY) {
-                    genPush(c, c + (offset shl 1), 24)
+        when (EMPTY) {
+            color[c + offset] -> {
+                genPush(c, c + offset, 16)
+                // Génération du double mouvement initial du pion
+                when {
+                    isPawnStartingRank(c) -> if (EMPTY == color[c + (offset shl 1)])
+                        genPush(c, c + (offset shl 1), 24)
                 }
             }
         }
@@ -167,11 +168,9 @@ class Board : Constants {
         if (c and 7 != 7 && color[rightCapture] == oppositeColor) genPush(c, rightCapture, 17)
     }
 
-
     fun isPawnStartingRank(c: Int): Boolean {
         return side == LIGHT && c in 48..55 || side == DARK && c in 8..15
     }
-
 
     fun genEnpassant() {
         when {
@@ -220,7 +219,6 @@ class Board : Constants {
         }
     }
 
-
     fun genPush(from: Int, to: Int, bits: Int) {
         if ((bits and 16) != 0 && (if (side == LIGHT) to <= H8 else to >= A1)) {
             genPromote(from, to, bits)
@@ -228,7 +226,6 @@ class Board : Constants {
         }
         pseudomoves.add(Move(from.toByte(), to.toByte(), 0.toByte(), bits.toByte()))
     }
-
 
     fun genPromote(from: Int, to: Int, bits: Int) {
         for (i in KNIGHT..QUEEN) pseudomoves.add(
@@ -405,7 +402,6 @@ class Board : Constants {
             }
         }
     }
-
 
     fun inCheck(board: Board, s: Int): Boolean {
         return range(0, BOARD_SIZE)
