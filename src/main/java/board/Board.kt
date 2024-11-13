@@ -142,10 +142,9 @@ class Board : Constants {
 
     fun genPawn(c: Int) {
         val offset = if (side == LIGHT) -8 else 8
-        val oppositeColor = side xor 1
-
-        // Génération des captures possibles du pion
-        generatePawnCaptures(c, offset, oppositeColor)
+        (side xor 1).also {
+            generatePawnCaptures(c, offset, it)
+        }
 
         // Génération du mouvement simple du pion vers l'avant
         when (EMPTY) {
@@ -173,8 +172,7 @@ class Board : Constants {
     }
 
     fun genEnpassant() {
-        when {
-            ep != -1 -> {
+        when { ep != -1 -> {
                 val offsets = if (side == LIGHT) listOf(7, 9) else listOf(-9, -7)
                 val targetColor = if (side == LIGHT) LIGHT else DARK
                 offsets.forEach { offset ->
@@ -379,7 +377,7 @@ class Board : Constants {
         }
 
         when {
-            (m.bits.toInt() and 2) != 0 -> {
+            m.bits.toInt() and 2 != 0 -> {
                 val (from, to) = getRookMovePositions(m.to)
 
                 if (from != -1 && to != -1) {
@@ -392,8 +390,8 @@ class Board : Constants {
         }
 
 
-        if ((m.bits.toInt() and 4) != 0) {
-            if (side == LIGHT) {
+        when {
+            m.bits.toInt() and 4 != 0 -> if (side == LIGHT) {
                 color[m.to + 8] = xside
                 piece[m.to + 8] = PAWN
             } else {
@@ -406,6 +404,6 @@ class Board : Constants {
     fun inCheck(board: Board, s: Int): Boolean {
         return range(0, BOARD_SIZE)
             .filter { i: Int -> board.piece[i] == KING && board.color[i] == s }
-            .anyMatch { i: Int -> board.isAttacked(i, s xor 1) }
+            .anyMatch { i: Int -> with(board) { isAttacked(i, s xor 1) } }
     }
 }
